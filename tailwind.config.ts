@@ -13,6 +13,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        heading: ['Playfair Display', 'serif'],
+        body: ['Lato', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -57,6 +61,25 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        saffron: {
+          DEFAULT: "hsl(var(--saffron))",
+          light: "hsl(var(--saffron-light))",
+        },
+        maroon: {
+          DEFAULT: "hsl(var(--maroon))",
+          light: "hsl(var(--maroon-light))",
+        },
+        gold: {
+          DEFAULT: "hsl(var(--gold))",
+          light: "hsl(var(--gold-light))",
+        },
+        cream: {
+          DEFAULT: "hsl(var(--cream))",
+          dark: "hsl(var(--cream-dark))",
+        },
+        temple: {
+          brown: "hsl(var(--temple-brown))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -65,25 +88,27 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      backgroundImage: {
+        'gradient-sacred': 'var(--gradient-sacred)',
+        'gradient-sunset': 'var(--gradient-sunset)',
+        'gradient-warm': 'var(--gradient-warm)',
+      },
+      boxShadow: {
+        'sacred': 'var(--shadow-soft)',
+        'glow': 'var(--shadow-glow)',
+        'gold': 'var(--shadow-gold)',
       },
     },
   },
