@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/hero-temple.jpg";
 
@@ -23,21 +24,40 @@ const HeroSection = () => {
         </h1>
         
         <p className="text-lg md:text-xl text-primary-foreground/90 max-w-2xl mx-auto mb-4 font-body animate-fade-in-up animation-delay-200">
-          Your Spiritual Companion
+          Your Spiritual Companion for Peace & Devotion
         </p>
         
         <p className="text-base md:text-lg text-primary-foreground/80 max-w-xl mx-auto mb-10 font-body animate-fade-in-up animation-delay-300">
-          Explore the divine wisdom of Hindu scriptures, mantras, and traditions. 
-          Find peace, devotion, and enlightenment on your spiritual journey.
+          Meditate, pray, chant mantras, and find inner peace through divine wisdom.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up animation-delay-400">
-          <Button variant="sacred" size="xl">
-            Explore Deities
-          </Button>
-          <Button variant="hero" size="xl">
-            Daily Mantra
-          </Button>
+          <Link to="/meditation">
+            <Button variant="sacred" size="xl">
+              🧘 Start Meditation
+            </Button>
+          </Link>
+          <a href="#deities">
+            <Button variant="hero" size="xl">
+              🕉️ Explore Deities
+            </Button>
+          </a>
+        </div>
+
+        {/* Quick Stats */}
+        <div className="mt-16 grid grid-cols-3 gap-6 max-w-md mx-auto animate-fade-in-up animation-delay-500">
+          <div className="text-center">
+            <p className="text-2xl font-heading font-bold text-primary-foreground">11+</p>
+            <p className="text-xs text-primary-foreground/70">Deities</p>
+          </div>
+          <div className="text-center">
+            <p className="text-2xl font-heading font-bold text-primary-foreground">50+</p>
+            <p className="text-xs text-primary-foreground/70">Mantras</p>
+          </div>
+          <div className="text-center">
+            <p className="text-2xl font-heading font-bold text-primary-foreground">20+</p>
+            <p className="text-xs text-primary-foreground/70">Meditations</p>
+          </div>
         </div>
       </div>
 
