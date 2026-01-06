@@ -1,31 +1,67 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { BookOpen, Volume2, Pause, Play, ChevronDown, ChevronUp } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
+import { BookOpen, Volume2, Pause, Play, ChevronDown, ChevronUp, VolumeX, Music } from "lucide-react";
 import { Prayer } from "@/data/prayers";
+import { useAmbientSound, SoundType } from "@/hooks/useAmbientSound";
 
 interface PrayerSectionProps {
   prayers: Prayer[];
   deityName: string;
 }
 
+// Map prayer types to ambient sounds
+const getPrayerSoundType = (type: Prayer['type']): SoundType => {
+  switch (type) {
+    case 'aarti': return 'bells';
+    case 'chalisa': return 'tanpura';
+    case 'stotram': return 'om';
+    default: return 'meditation';
+  }
+};
+
 const PrayerSection = ({ prayers, deityName }: PrayerSectionProps) => {
+  const { play, stop, setVolume, isPlaying: isMusicPlaying } = useAmbientSound();
   const [mode, setMode] = useState<"read" | "listen">("read");
   const [expandedPrayer, setExpandedPrayer] = useState<string | null>(prayers[0]?.id || null);
-  const [isPlaying, setIsPlaying] = useState<string | null>(null);
+  const [playingPrayer, setPlayingPrayer] = useState<string | null>(null);
+  const [volume, setVolumeState] = useState(0.4);
+  const [isMuted, setIsMuted] = useState(false);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      stop();
+    };
+  }, [stop]);
 
   const toggleExpand = (prayerId: string) => {
     setExpandedPrayer(expandedPrayer === prayerId ? null : prayerId);
   };
 
-  const togglePlay = (prayerId: string) => {
-    if (isPlaying === prayerId) {
-      setIsPlaying(null);
+  const togglePlay = (prayer: Prayer) => {
+    if (playingPrayer === prayer.id) {
+      stop();
+      setPlayingPrayer(null);
     } else {
-      setIsPlaying(prayerId);
+      const soundType = getPrayerSoundType(prayer.type);
+      play({ type: soundType, volume: isMuted ? 0 : volume });
+      setPlayingPrayer(prayer.id);
     }
+  };
+
+  const handleVolumeChange = (value: number[]) => {
+    const newVolume = value[0];
+    setVolumeState(newVolume);
+    setVolume(isMuted ? 0 : newVolume);
+  };
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+    setVolume(isMuted ? volume : 0);
   };
 
   const getTypeLabel = (type: Prayer['type']) => {
@@ -61,7 +97,7 @@ const PrayerSection = ({ prayers, deityName }: PrayerSectionProps) => {
               Read
             </TabsTrigger>
             <TabsTrigger value="listen" className="text-xs gap-1">
-              <Volume2 className="w-3 h-3" />
+              <Music className="w-3 h-3" />
               Listen
             </TabsTrigger>
           </TabsList>
@@ -81,6 +117,12 @@ const PrayerSection = ({ prayers, deityName }: PrayerSectionProps) => {
                   <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
                     {getTypeLabel(prayer.type)}
                   </span>
+                  {playingPrayer === prayer.id && (
+                    <span className="flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
+                      <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                      Playing
+                    </span>
+                  )}
                 </div>
                 <h4 className="font-heading font-semibold text-foreground">
                   {prayer.name}
@@ -100,29 +142,45 @@ const PrayerSection = ({ prayers, deityName }: PrayerSectionProps) => {
             {expandedPrayer === prayer.id && (
               <div className="px-4 pb-4 animate-fade-in">
                 {mode === "listen" && (
-                  <div className="mb-4 p-3 bg-primary/5 rounded-lg flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <Button
-                        size="icon"
-                        onClick={() => togglePlay(prayer.id)}
-                        className="w-10 h-10 rounded-full bg-primary hover:bg-primary/90"
-                      >
-                        {isPlaying === prayer.id ? (
-                          <Pause className="w-4 h-4" />
-                        ) : (
-                          <Play className="w-4 h-4 ml-0.5" />
-                        )}
-                      </Button>
-                      <div>
-                        <p className="text-sm font-medium text-foreground">
-                          {isPlaying === prayer.id ? "Playing..." : "Tap to listen"}
-                        </p>
-                        <p className="text-xs text-muted-foreground">
-                          High-quality audio narration
-                        </p>
+                  <div className="mb-4 p-3 bg-primary/5 rounded-lg">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <Button
+                          size="icon"
+                          onClick={() => togglePlay(prayer)}
+                          className="w-10 h-10 rounded-full bg-primary hover:bg-primary/90"
+                        >
+                          {playingPrayer === prayer.id ? (
+                            <Pause className="w-4 h-4" />
+                          ) : (
+                            <Play className="w-4 h-4 ml-0.5" />
+                          )}
+                        </Button>
+                        <div>
+                          <p className="text-sm font-medium text-foreground">
+                            {playingPrayer === prayer.id ? "Devotional music playing..." : "Tap to play ambient music"}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            Instrumental {getTypeLabel(prayer.type).toLowerCase()} ambience
+                          </p>
+                        </div>
                       </div>
                     </div>
-                    <Volume2 className="w-5 h-5 text-primary" />
+                    
+                    {playingPrayer === prayer.id && (
+                      <div className="flex items-center gap-3 pt-2 border-t border-border/30">
+                        <Button variant="ghost" size="icon" onClick={toggleMute} className="h-8 w-8">
+                          {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                        </Button>
+                        <Slider
+                          value={[volume]}
+                          onValueChange={handleVolumeChange}
+                          max={1}
+                          step={0.01}
+                          className="flex-1"
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
 

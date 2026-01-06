@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { RotateCcw, Pause, Play, Save, Check } from "lucide-react";
+import { RotateCcw, Pause, Play, Save, Check, Music, Volume2, VolumeX } from "lucide-react";
+import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
+import { useAmbientSound, SoundType } from "@/hooks/useAmbientSound";
 
 interface MantraJaapCounterProps {
   mantra: string;
@@ -11,11 +13,15 @@ interface MantraJaapCounterProps {
 
 const MantraJaapCounter = ({ mantra, deityName }: MantraJaapCounterProps) => {
   const { toast } = useToast();
+  const { play, stop, setVolume, isPlaying: isMusicPlaying } = useAmbientSound();
   const [count, setCount] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [dailyCount, setDailyCount] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [isSaved, setIsSaved] = useState(false);
+  const [musicEnabled, setMusicEnabled] = useState(false);
+  const [volume, setVolumeState] = useState(0.4);
+  const [isMuted, setIsMuted] = useState(false);
 
   const storageKey = `jaap_${deityName.replace(/\s/g, '_')}_${mantra.slice(0, 10)}`;
 
@@ -32,6 +38,34 @@ const MantraJaapCounter = ({ mantra, deityName }: MantraJaapCounterProps) => {
       setTotalCount(data.totalCount || 0);
     }
   }, [storageKey]);
+
+  // Cleanup music on unmount
+  useEffect(() => {
+    return () => {
+      stop();
+    };
+  }, [stop]);
+
+  const toggleMusic = () => {
+    if (musicEnabled) {
+      stop();
+      setMusicEnabled(false);
+    } else {
+      play({ type: 'om', volume: isMuted ? 0 : volume });
+      setMusicEnabled(true);
+    }
+  };
+
+  const handleVolumeChange = (value: number[]) => {
+    const newVolume = value[0];
+    setVolumeState(newVolume);
+    setVolume(isMuted ? 0 : newVolume);
+  };
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+    setVolume(isMuted ? volume : 0);
+  };
 
   const handleTap = () => {
     if (isPaused) return;
@@ -84,6 +118,39 @@ const MantraJaapCounter = ({ mantra, deityName }: MantraJaapCounterProps) => {
         <p className="text-sm text-muted-foreground mb-4 font-medium">
           {mantra}
         </p>
+
+        {/* Music Controls */}
+        <div className="mb-4 p-3 bg-background/50 rounded-lg">
+          <div className="flex items-center justify-between">
+            <Button
+              variant={musicEnabled ? "default" : "outline"}
+              size="sm"
+              onClick={toggleMusic}
+              className="gap-2"
+            >
+              <Music className="w-4 h-4" />
+              {musicEnabled ? "Om Playing" : "Play Om Music"}
+              {musicEnabled && (
+                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+              )}
+            </Button>
+            
+            {musicEnabled && (
+              <div className="flex items-center gap-2">
+                <Button variant="ghost" size="icon" onClick={toggleMute} className="h-8 w-8">
+                  {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                </Button>
+                <Slider
+                  value={[volume]}
+                  onValueChange={handleVolumeChange}
+                  max={1}
+                  step={0.01}
+                  className="w-20"
+                />
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* Main Counter Button */}
         <button

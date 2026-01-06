@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react";
 import { MeditationTrack } from "@/data/meditationMoods";
+import { useAmbientSound, SoundType } from "@/hooks/useAmbientSound";
 
 interface MeditationPlayerProps {
   track: MeditationTrack;
@@ -12,14 +13,59 @@ interface MeditationPlayerProps {
   onPrevious?: () => void;
 }
 
+// Map track names to sound types
+const getTrackSoundType = (trackName: string): SoundType => {
+  const name = trackName.toLowerCase();
+  if (name.includes('om') || name.includes('drone')) return 'om';
+  if (name.includes('bell') || name.includes('temple')) return 'bells';
+  if (name.includes('tanpura') || name.includes('string')) return 'tanpura';
+  if (name.includes('flute') || name.includes('bansuri')) return 'flute';
+  if (name.includes('nature') || name.includes('rain') || name.includes('water') || name.includes('wind')) return 'nature';
+  return 'meditation';
+};
+
 const MeditationPlayer = ({ track, moodName, onNext, onPrevious }: MeditationPlayerProps) => {
+  const { play, stop, setVolume, isPlaying: isSoundPlaying } = useAmbientSound();
   const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState([70]);
+  const [volume, setVolumeState] = useState([70]);
   const [progress, setProgress] = useState([0]);
   const [isMuted, setIsMuted] = useState(false);
 
+  // Start/stop sound when play state changes
+  useEffect(() => {
+    if (isPlaying) {
+      const soundType = getTrackSoundType(track.name);
+      play({ type: soundType, volume: isMuted ? 0 : volume[0] / 100 });
+    } else {
+      stop();
+    }
+    
+    return () => {
+      stop();
+    };
+  }, [isPlaying, track.name]);
+
+  // Update volume
+  useEffect(() => {
+    setVolume(isMuted ? 0 : volume[0] / 100);
+  }, [volume, isMuted, setVolume]);
+
   const togglePlay = () => setIsPlaying(!isPlaying);
   const toggleMute = () => setIsMuted(!isMuted);
+
+  const handleNext = () => {
+    stop();
+    setIsPlaying(false);
+    setProgress([0]);
+    onNext?.();
+  };
+
+  const handlePrevious = () => {
+    stop();
+    setIsPlaying(false);
+    setProgress([0]);
+    onPrevious?.();
+  };
 
   return (
     <Card className="p-6 bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
@@ -29,6 +75,13 @@ const MeditationPlayer = ({ track, moodName, onNext, onPrevious }: MeditationPla
           {track.name}
         </h3>
         <p className="text-sm text-muted-foreground">{track.description}</p>
+        
+        {isPlaying && (
+          <div className="mt-3 flex items-center justify-center gap-2">
+            <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+            <span className="text-xs text-green-600 dark:text-green-400">Playing ambient music</span>
+          </div>
+        )}
       </div>
 
       {/* Progress Bar */}
@@ -51,7 +104,7 @@ const MeditationPlayer = ({ track, moodName, onNext, onPrevious }: MeditationPla
         <Button
           variant="ghost"
           size="icon"
-          onClick={onPrevious}
+          onClick={handlePrevious}
           className="text-muted-foreground hover:text-foreground"
         >
           <SkipBack className="w-5 h-5" />
@@ -72,7 +125,7 @@ const MeditationPlayer = ({ track, moodName, onNext, onPrevious }: MeditationPla
         <Button
           variant="ghost"
           size="icon"
-          onClick={onNext}
+          onClick={handleNext}
           className="text-muted-foreground hover:text-foreground"
         >
           <SkipForward className="w-5 h-5" />
@@ -91,7 +144,7 @@ const MeditationPlayer = ({ track, moodName, onNext, onPrevious }: MeditationPla
         </Button>
         <Slider
           value={isMuted ? [0] : volume}
-          onValueChange={setVolume}
+          onValueChange={setVolumeState}
           max={100}
           step={1}
           className="w-24"

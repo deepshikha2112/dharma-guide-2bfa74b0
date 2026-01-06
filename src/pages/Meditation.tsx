@@ -5,9 +5,10 @@ import Footer from "@/components/Footer";
 import MeditationMoodCard from "@/components/MeditationMoodCard";
 import MeditationPlayer from "@/components/MeditationPlayer";
 import TrackList from "@/components/TrackList";
+import AmbientSoundPlayer from "@/components/AmbientSoundPlayer";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Sparkles, Heart } from "lucide-react";
+import { ArrowLeft, Sparkles, Heart, Music } from "lucide-react";
 import { meditationMoods, MeditationMood, MeditationTrack } from "@/data/meditationMoods";
 
 const Meditation = () => {
@@ -103,17 +104,28 @@ const Meditation = () => {
             </div>
           )}
 
-          {/* Guidance */}
+          {/* Quick Ambient Sounds */}
           {!selectedMood && (
-            <Card className="p-8 text-center bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
-              <span className="text-5xl mb-4 block">🕉️</span>
-              <h3 className="font-heading text-xl font-semibold text-foreground mb-2">
-                Select Your Mood
-              </h3>
-              <p className="text-muted-foreground max-w-md mx-auto">
-                Choose how you're feeling from the options above, and we'll guide you to the perfect meditation music for your state of mind.
-              </p>
-            </Card>
+            <div className="space-y-6">
+              <Card className="p-8 text-center bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
+                <span className="text-5xl mb-4 block">🕉️</span>
+                <h3 className="font-heading text-xl font-semibold text-foreground mb-2">
+                  Select Your Mood
+                </h3>
+                <p className="text-muted-foreground max-w-md mx-auto">
+                  Choose how you're feeling from the options above, and we'll guide you to the perfect meditation music for your state of mind.
+                </p>
+              </Card>
+
+              {/* Divine Ambient Sounds Player */}
+              <div>
+                <h2 className="font-heading text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <Music className="w-5 h-5 text-primary" />
+                  Quick Divine Sounds
+                </h2>
+                <AmbientSoundPlayer />
+              </div>
+            </div>
           )}
         </div>
       </section>
