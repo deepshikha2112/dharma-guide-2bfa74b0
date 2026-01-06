@@ -3,41 +3,41 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
-import { useAmbientSound, SoundType } from '@/hooks/useAmbientSound';
+import { useDivineAudio, MoodType } from '@/hooks/useDivineAudio';
 import { cn } from '@/lib/utils';
 
-interface SoundOption {
-  type: SoundType;
+interface MoodOption {
+  mood: MoodType;
   label: string;
   description: string;
   icon: string;
 }
 
-const soundOptions: SoundOption[] = [
-  { type: 'om', label: 'Om Drone', description: 'Deep meditative Om frequency', icon: '🕉️' },
-  { type: 'bells', label: 'Temple Bells', description: 'Gentle temple bell ambience', icon: '🔔' },
-  { type: 'tanpura', label: 'Tanpura', description: 'Traditional drone instrument', icon: '🎸' },
-  { type: 'flute', label: 'Bansuri Flute', description: 'Peaceful flute melodies', icon: '🎵' },
-  { type: 'nature', label: 'Nature Sounds', description: 'Wind and water ambience', icon: '🌿' },
-  { type: 'meditation', label: 'Deep Meditation', description: 'Binaural theta waves', icon: '🧘' },
+const moodOptions: MoodOption[] = [
+  { mood: 'peaceful', label: 'Peaceful', description: 'Calm, serene ambient', icon: '☮️' },
+  { mood: 'stressed', label: 'Stressed', description: 'Water & calming sounds', icon: '🌊' },
+  { mood: 'sad', label: 'Sad', description: 'Gentle, comforting tones', icon: '💙' },
+  { mood: 'angry', label: 'Angry', description: 'Grounding, deep tones', icon: '🔥' },
+  { mood: 'anxious', label: 'Anxious', description: 'Binaural alpha waves', icon: '🧘' },
+  { mood: 'happy', label: 'Happy', description: 'Uplifting, bright sounds', icon: '✨' },
+  { mood: 'devotional', label: 'Devotional', description: 'Sacred Om & temple', icon: '🙏' },
 ];
 
-interface AmbientSoundPlayerProps {
+interface MoodSoundPlayerProps {
   compact?: boolean;
-  defaultType?: SoundType;
   className?: string;
 }
 
-const AmbientSoundPlayer = ({ compact = false, defaultType, className }: AmbientSoundPlayerProps) => {
-  const { play, stop, setVolume, isPlaying, currentType } = useAmbientSound();
+const MoodSoundPlayer = ({ compact = false, className }: MoodSoundPlayerProps) => {
+  const { play, stop, setVolume, isPlaying, currentMood } = useDivineAudio();
   const [volume, setVolumeState] = useState(0.5);
   const [isMuted, setIsMuted] = useState(false);
 
-  const handleSoundSelect = (type: SoundType) => {
-    if (isPlaying && currentType === type) {
+  const handleMoodSelect = (mood: MoodType) => {
+    if (isPlaying && currentMood === mood) {
       stop();
     } else {
-      play({ type, volume: isMuted ? 0 : volume });
+      play({ mood, volume: isMuted ? 0 : volume });
     }
   };
 
@@ -55,18 +55,18 @@ const AmbientSoundPlayer = ({ compact = false, defaultType, className }: Ambient
   if (compact) {
     return (
       <div className={cn("flex items-center gap-4", className)}>
-        <div className="flex gap-2">
-          {soundOptions.slice(0, 3).map((option) => (
+        <div className="flex gap-2 flex-wrap">
+          {moodOptions.slice(0, 4).map((option) => (
             <Button
-              key={option.type}
-              variant={currentType === option.type ? "default" : "outline"}
+              key={option.mood}
+              variant={currentMood === option.mood ? "default" : "outline"}
               size="sm"
-              onClick={() => handleSoundSelect(option.type)}
-              className="text-xs"
+              onClick={() => handleMoodSelect(option.mood)}
+              className="text-xs gap-1"
             >
               {option.icon}
-              {isPlaying && currentType === option.type && (
-                <span className="ml-1 w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+              {isPlaying && currentMood === option.mood && (
+                <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
               )}
             </Button>
           ))}
@@ -93,20 +93,23 @@ const AmbientSoundPlayer = ({ compact = false, defaultType, className }: Ambient
       <CardHeader className="pb-4">
         <CardTitle className="text-lg font-serif flex items-center gap-2">
           <span className="text-xl">🎶</span>
-          Divine Ambient Sounds
+          How Are You Feeling Today?
         </CardTitle>
+        <p className="text-sm text-muted-foreground">
+          Select your mood and let divine music heal your mind
+        </p>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {soundOptions.map((option) => (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          {moodOptions.map((option) => (
             <button
-              key={option.type}
-              onClick={() => handleSoundSelect(option.type)}
+              key={option.mood}
+              onClick={() => handleMoodSelect(option.mood)}
               className={cn(
                 "relative p-4 rounded-xl border-2 transition-all duration-300",
                 "hover:scale-105 hover:shadow-lg",
                 "flex flex-col items-center text-center gap-2",
-                currentType === option.type
+                currentMood === option.mood
                   ? "border-primary bg-primary/10 shadow-primary/20 shadow-lg"
                   : "border-border/50 bg-background/50 hover:border-primary/50"
               )}
@@ -117,7 +120,7 @@ const AmbientSoundPlayer = ({ compact = false, defaultType, className }: Ambient
                 {option.description}
               </span>
               
-              {isPlaying && currentType === option.type && (
+              {isPlaying && currentMood === option.mood && (
                 <div className="absolute top-2 right-2 flex items-center gap-1">
                   <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                   <Pause className="h-3 w-3 text-primary" />
@@ -158,7 +161,7 @@ const AmbientSoundPlayer = ({ compact = false, defaultType, className }: Ambient
               className="gap-2"
             >
               <Pause className="h-4 w-4" />
-              Stop All
+              Stop
             </Button>
           )}
         </div>
@@ -167,4 +170,4 @@ const AmbientSoundPlayer = ({ compact = false, defaultType, className }: Ambient
   );
 };
 
-export default AmbientSoundPlayer;
+export default MoodSoundPlayer;

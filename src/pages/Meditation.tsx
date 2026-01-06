@@ -5,9 +5,8 @@ import Footer from "@/components/Footer";
 import MeditationMoodCard from "@/components/MeditationMoodCard";
 import MeditationPlayer from "@/components/MeditationPlayer";
 import TrackList from "@/components/TrackList";
-import AmbientSoundPlayer from "@/components/AmbientSoundPlayer";
+import MoodSoundPlayer from "@/components/MoodSoundPlayer";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { ArrowLeft, Sparkles, Heart, Music } from "lucide-react";
 import { meditationMoods, MeditationMood, MeditationTrack } from "@/data/meditationMoods";
 
@@ -123,7 +122,7 @@ const Meditation = () => {
                   <Music className="w-5 h-5 text-primary" />
                   Quick Divine Sounds
                 </h2>
-                <AmbientSoundPlayer />
+                <MoodSoundPlayer />
               </div>
             </div>
           )}

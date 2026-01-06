@@ -1,9 +1,12 @@
+import { MoodType, InstrumentType } from '@/hooks/useDivineAudio';
+
 export interface MeditationMood {
   id: string;
   name: string;
   description: string;
   icon: string;
   color: string;
+  moodType: MoodType;
   tracks: MeditationTrack[];
 }
 
@@ -12,85 +15,106 @@ export interface MeditationTrack {
   name: string;
   duration: string;
   description: string;
+  instrument: InstrumentType;
 }
 
 export const meditationMoods: MeditationMood[] = [
   {
-    id: "stress-relief",
-    name: "Stress Relief",
-    description: "Release tension and find calm with soothing sounds",
-    icon: "🌊",
-    color: "from-blue-400/20 to-cyan-400/20",
-    tracks: [
-      { id: "sr1", name: "Ocean of Peace", duration: "10:00", description: "Gentle waves and soft ambient music" },
-      { id: "sr2", name: "Forest Rain", duration: "15:00", description: "Raindrops on leaves with bird songs" },
-      { id: "sr3", name: "Temple Bells", duration: "12:00", description: "Sacred bells with soft chanting" },
-      { id: "sr4", name: "River Flow", duration: "20:00", description: "Peaceful river sounds for deep relaxation" },
-    ]
-  },
-  {
-    id: "anxiety-calm",
-    name: "Anxiety & Overthinking",
-    description: "Quiet the mind and ease anxious thoughts",
-    icon: "🧘",
-    color: "from-purple-400/20 to-indigo-400/20",
-    tracks: [
-      { id: "ac1", name: "Breath of Silence", duration: "8:00", description: "Guided breathing with soft music" },
-      { id: "ac2", name: "Still Mind", duration: "15:00", description: "Minimalist ambient for mental peace" },
-      { id: "ac3", name: "Grounding Earth", duration: "12:00", description: "Deep tones for feeling centered" },
-      { id: "ac4", name: "Lotus Meditation", duration: "10:00", description: "Gentle flute and nature sounds" },
-    ]
-  },
-  {
-    id: "peace-calm",
-    name: "Peace & Calm",
-    description: "Find inner stillness and serenity",
+    id: "peaceful",
+    name: "Peaceful",
+    description: "Find inner stillness and serenity with divine sounds",
     icon: "☮️",
     color: "from-green-400/20 to-emerald-400/20",
+    moodType: "peaceful",
     tracks: [
-      { id: "pc1", name: "Sacred Silence", duration: "20:00", description: "Pure ambient peace" },
-      { id: "pc2", name: "Garden of Tranquility", duration: "15:00", description: "Nature sounds with soft harmonies" },
-      { id: "pc3", name: "Divine Light", duration: "12:00", description: "Uplifting spiritual music" },
-      { id: "pc4", name: "Om Shanti", duration: "10:00", description: "Peaceful chanting and bells" },
+      { id: "p1", name: "Sacred Silence", duration: "∞", description: "Pure ambient peace with soft harmonics", instrument: "om" },
+      { id: "p2", name: "Temple Serenity", duration: "∞", description: "Gentle temple bells and soft drone", instrument: "bells" },
+      { id: "p3", name: "Bansuri Dreams", duration: "∞", description: "Peaceful flute melodies", instrument: "flute" },
+      { id: "p4", name: "Nature's Calm", duration: "∞", description: "Wind and water for deep relaxation", instrument: "nature" },
     ]
   },
   {
-    id: "focus",
-    name: "Focus & Concentration",
-    description: "Sharpen your mind with clarity-enhancing sounds",
-    icon: "🎯",
-    color: "from-amber-400/20 to-orange-400/20",
+    id: "stressed",
+    name: "Stressed",
+    description: "Release tension and find calm instantly",
+    icon: "🌊",
+    color: "from-blue-400/20 to-cyan-400/20",
+    moodType: "stressed",
     tracks: [
-      { id: "fc1", name: "Deep Focus", duration: "30:00", description: "Binaural beats for concentration" },
-      { id: "fc2", name: "Mind Clarity", duration: "20:00", description: "Steady tones for mental focus" },
-      { id: "fc3", name: "Study Temple", duration: "45:00", description: "Ambient music for studying" },
-      { id: "fc4", name: "Clear Stream", duration: "25:00", description: "Water sounds for focus" },
+      { id: "s1", name: "Flowing Waters", duration: "∞", description: "Calming water sounds for stress relief", instrument: "water" },
+      { id: "s2", name: "Wind Through Trees", duration: "∞", description: "Gentle wind for mental release", instrument: "wind" },
+      { id: "s3", name: "Temple Bells", duration: "∞", description: "Sacred bells to calm the mind", instrument: "bells" },
+      { id: "s4", name: "Tanpura Healing", duration: "∞", description: "Deep drone for stress release", instrument: "tanpura" },
     ]
   },
   {
-    id: "positive-energy",
-    name: "Positive Energy",
-    description: "Uplift your spirit and radiate positivity",
+    id: "sad",
+    name: "Sad",
+    description: "Gentle sounds for emotional healing",
+    icon: "💙",
+    color: "from-slate-400/20 to-gray-400/20",
+    moodType: "sad",
+    tracks: [
+      { id: "sd1", name: "Comforting Embrace", duration: "∞", description: "Warm, nurturing tones", instrument: "tanpura" },
+      { id: "sd2", name: "Gentle Flute", duration: "∞", description: "Soft melodies for the heart", instrument: "flute" },
+      { id: "sd3", name: "Om Healing", duration: "∞", description: "Divine frequencies for comfort", instrument: "om" },
+      { id: "sd4", name: "Wind Chimes", duration: "∞", description: "Soft chimes for emotional release", instrument: "chimes" },
+    ]
+  },
+  {
+    id: "angry",
+    name: "Angry",
+    description: "Grounding sounds to release anger peacefully",
+    icon: "🔥",
+    color: "from-red-400/20 to-orange-400/20",
+    moodType: "angry",
+    tracks: [
+      { id: "a1", name: "Grounding Earth", duration: "∞", description: "Deep, low tones for centering", instrument: "om" },
+      { id: "a2", name: "Calm Wind", duration: "∞", description: "Gentle wind for release", instrument: "wind" },
+      { id: "a3", name: "Water Release", duration: "∞", description: "Flowing water to wash away anger", instrument: "water" },
+      { id: "a4", name: "Temple Peace", duration: "∞", description: "Sacred bells for tranquility", instrument: "bells" },
+    ]
+  },
+  {
+    id: "anxious",
+    name: "Anxious",
+    description: "Binaural beats and calming sounds for anxiety relief",
+    icon: "🧘",
+    color: "from-purple-400/20 to-indigo-400/20",
+    moodType: "anxious",
+    tracks: [
+      { id: "ax1", name: "Alpha Waves", duration: "∞", description: "Binaural beats for relaxation", instrument: "om" },
+      { id: "ax2", name: "Still Mind", duration: "∞", description: "Gentle tanpura for mental peace", instrument: "tanpura" },
+      { id: "ax3", name: "Soft Chimes", duration: "∞", description: "Wind chimes for gentle calming", instrument: "chimes" },
+      { id: "ax4", name: "Nature Calm", duration: "∞", description: "Natural sounds for grounding", instrument: "nature" },
+    ]
+  },
+  {
+    id: "happy",
+    name: "Happy",
+    description: "Uplifting sounds to enhance your joy",
     icon: "✨",
     color: "from-yellow-400/20 to-amber-400/20",
+    moodType: "happy",
     tracks: [
-      { id: "pe1", name: "Morning Blessings", duration: "10:00", description: "Uplifting devotional music" },
-      { id: "pe2", name: "Joyful Heart", duration: "12:00", description: "Happy and peaceful melodies" },
-      { id: "pe3", name: "Divine Energy", duration: "15:00", description: "Energizing spiritual sounds" },
-      { id: "pe4", name: "Sunrise Mantra", duration: "8:00", description: "Morning chants for positive start" },
+      { id: "h1", name: "Joyful Morning", duration: "∞", description: "Bright, uplifting melodies", instrument: "flute" },
+      { id: "h2", name: "Celebration Bells", duration: "∞", description: "Happy temple bells", instrument: "bells" },
+      { id: "h3", name: "Divine Joy", duration: "∞", description: "Celebratory Om chanting", instrument: "om" },
+      { id: "h4", name: "Wind Chimes Dance", duration: "∞", description: "Playful chimes", instrument: "chimes" },
     ]
   },
   {
-    id: "sleep",
-    name: "Sleep & Deep Relaxation",
-    description: "Drift into peaceful, restful sleep",
-    icon: "🌙",
-    color: "from-indigo-400/20 to-violet-400/20",
+    id: "devotional",
+    name: "Devotional",
+    description: "Sacred sounds for spiritual connection",
+    icon: "🙏",
+    color: "from-orange-400/20 to-amber-400/20",
+    moodType: "devotional",
     tracks: [
-      { id: "sl1", name: "Dreamscape", duration: "60:00", description: "Gentle sounds for deep sleep" },
-      { id: "sl2", name: "Night Prayer", duration: "30:00", description: "Soft devotional lullaby" },
-      { id: "sl3", name: "Starlit Peace", duration: "45:00", description: "Ambient sounds for rest" },
-      { id: "sl4", name: "Sacred Rest", duration: "40:00", description: "Temple sounds for sleep" },
+      { id: "d1", name: "Om Meditation", duration: "∞", description: "Sacred Om frequency", instrument: "om" },
+      { id: "d2", name: "Temple Atmosphere", duration: "∞", description: "Authentic temple bells", instrument: "bells" },
+      { id: "d3", name: "Tanpura Prayer", duration: "∞", description: "Traditional drone for worship", instrument: "tanpura" },
+      { id: "d4", name: "Divine Flute", duration: "∞", description: "Krishna-style flute", instrument: "flute" },
     ]
   }
 ];

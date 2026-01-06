@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { RotateCcw, Pause, Play, Save, Check, Music, Volume2, VolumeX } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
-import { useAmbientSound, SoundType } from "@/hooks/useAmbientSound";
+import { useDivineAudio } from "@/hooks/useDivineAudio";
 
 interface MantraJaapCounterProps {
   mantra: string;
@@ -13,7 +13,7 @@ interface MantraJaapCounterProps {
 
 const MantraJaapCounter = ({ mantra, deityName }: MantraJaapCounterProps) => {
   const { toast } = useToast();
-  const { play, stop, setVolume, isPlaying: isMusicPlaying } = useAmbientSound();
+  const { play, stop, setVolume, isPlaying: isMusicPlaying } = useDivineAudio();
   const [count, setCount] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [dailyCount, setDailyCount] = useState(0);
@@ -22,11 +22,11 @@ const MantraJaapCounter = ({ mantra, deityName }: MantraJaapCounterProps) => {
   const [musicEnabled, setMusicEnabled] = useState(false);
   const [volume, setVolumeState] = useState(0.4);
   const [isMuted, setIsMuted] = useState(false);
+  const [targetCount, setTargetCount] = useState<number | null>(null);
 
   const storageKey = `jaap_${deityName.replace(/\s/g, '_')}_${mantra.slice(0, 10)}`;
 
   useEffect(() => {
-    // Load saved counts from localStorage
     const saved = localStorage.getItem(storageKey);
     if (saved) {
       const data = JSON.parse(saved);
@@ -39,19 +39,31 @@ const MantraJaapCounter = ({ mantra, deityName }: MantraJaapCounterProps) => {
     }
   }, [storageKey]);
 
-  // Cleanup music on unmount
   useEffect(() => {
     return () => {
       stop();
     };
   }, [stop]);
 
+  // Check if target reached
+  useEffect(() => {
+    if (targetCount && count >= targetCount) {
+      toast({
+        title: "🎉 Target Reached!",
+        description: `You completed ${targetCount} chants. May you be blessed!`,
+      });
+      if (navigator.vibrate) {
+        navigator.vibrate([100, 50, 100, 50, 100]);
+      }
+    }
+  }, [count, targetCount, toast]);
+
   const toggleMusic = () => {
     if (musicEnabled) {
       stop();
       setMusicEnabled(false);
     } else {
-      play({ type: 'om', volume: isMuted ? 0 : volume });
+      play({ instrument: 'mantra-rhythm', volume: isMuted ? 0 : volume });
       setMusicEnabled(true);
     }
   };
@@ -72,7 +84,6 @@ const MantraJaapCounter = ({ mantra, deityName }: MantraJaapCounterProps) => {
     setCount(prev => prev + 1);
     setIsSaved(false);
     
-    // Vibration feedback on mobile
     if (navigator.vibrate) {
       navigator.vibrate(30);
     }
@@ -81,6 +92,7 @@ const MantraJaapCounter = ({ mantra, deityName }: MantraJaapCounterProps) => {
   const handleReset = () => {
     setCount(0);
     setIsSaved(false);
+    setTargetCount(null);
   };
 
   const handleSave = () => {
@@ -109,15 +121,39 @@ const MantraJaapCounter = ({ mantra, deityName }: MantraJaapCounterProps) => {
     setIsPaused(!isPaused);
   };
 
+  const setTarget = (target: number) => {
+    setTargetCount(target);
+    setCount(0);
+    toast({
+      title: `🎯 Target Set: ${target}`,
+      description: "Start your mantra jaap!",
+    });
+  };
+
   return (
     <Card className="p-6 bg-gradient-to-br from-accent/10 to-primary/10 border-primary/20">
       <div className="text-center">
         <h3 className="font-heading text-lg font-semibold text-foreground mb-2">
           Mantra Jaap Counter
         </h3>
-        <p className="text-sm text-muted-foreground mb-4 font-medium">
+        <p className="text-sm text-muted-foreground mb-4 font-medium px-4">
           {mantra}
         </p>
+
+        {/* Target Selection */}
+        <div className="flex justify-center gap-2 mb-4">
+          {[11, 21, 51, 108].map((target) => (
+            <Button
+              key={target}
+              variant={targetCount === target ? "default" : "outline"}
+              size="sm"
+              onClick={() => setTarget(target)}
+              className="text-xs"
+            >
+              {target}
+            </Button>
+          ))}
+        </div>
 
         {/* Music Controls */}
         <div className="mb-4 p-3 bg-background/50 rounded-lg">
@@ -129,7 +165,7 @@ const MantraJaapCounter = ({ mantra, deityName }: MantraJaapCounterProps) => {
               className="gap-2"
             >
               <Music className="w-4 h-4" />
-              {musicEnabled ? "Om Playing" : "Play Om Music"}
+              {musicEnabled ? "Rhythm Playing" : "Play Mantra Rhythm"}
               {musicEnabled && (
                 <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
               )}
@@ -156,7 +192,7 @@ const MantraJaapCounter = ({ mantra, deityName }: MantraJaapCounterProps) => {
         <button
           onClick={handleTap}
           disabled={isPaused}
-          className={`w-36 h-36 mx-auto rounded-full flex flex-col items-center justify-center mb-6 transition-all duration-200 ${
+          className={`w-36 h-36 mx-auto rounded-full flex flex-col items-center justify-center mb-4 transition-all duration-200 ${
             isPaused
               ? "bg-muted/50 cursor-not-allowed"
               : "bg-gradient-to-br from-primary to-accent shadow-glow hover:scale-105 active:scale-95 cursor-pointer"
@@ -169,6 +205,21 @@ const MantraJaapCounter = ({ mantra, deityName }: MantraJaapCounterProps) => {
             {isPaused ? "Paused" : "Tap to Count"}
           </span>
         </button>
+
+        {/* Target Progress */}
+        {targetCount && (
+          <div className="mb-4">
+            <div className="h-2 bg-muted rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-primary transition-all duration-300"
+                style={{ width: `${Math.min((count / targetCount) * 100, 100)}%` }}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              {count} / {targetCount} ({Math.round((count / targetCount) * 100)}%)
+            </p>
+          </div>
+        )}
 
         {/* Control Buttons */}
         <div className="flex justify-center gap-3 mb-6">

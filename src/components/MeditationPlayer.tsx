@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react";
 import { MeditationTrack } from "@/data/meditationMoods";
-import { useAmbientSound, SoundType } from "@/hooks/useAmbientSound";
+import { useDivineAudio, InstrumentType } from "@/hooks/useDivineAudio";
 
 interface MeditationPlayerProps {
   track: MeditationTrack;
@@ -13,29 +13,16 @@ interface MeditationPlayerProps {
   onPrevious?: () => void;
 }
 
-// Map track names to sound types
-const getTrackSoundType = (trackName: string): SoundType => {
-  const name = trackName.toLowerCase();
-  if (name.includes('om') || name.includes('drone')) return 'om';
-  if (name.includes('bell') || name.includes('temple')) return 'bells';
-  if (name.includes('tanpura') || name.includes('string')) return 'tanpura';
-  if (name.includes('flute') || name.includes('bansuri')) return 'flute';
-  if (name.includes('nature') || name.includes('rain') || name.includes('water') || name.includes('wind')) return 'nature';
-  return 'meditation';
-};
-
 const MeditationPlayer = ({ track, moodName, onNext, onPrevious }: MeditationPlayerProps) => {
-  const { play, stop, setVolume, isPlaying: isSoundPlaying } = useAmbientSound();
+  const { play, stop, setVolume, isPlaying: isSoundPlaying } = useDivineAudio();
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolumeState] = useState([70]);
-  const [progress, setProgress] = useState([0]);
   const [isMuted, setIsMuted] = useState(false);
 
   // Start/stop sound when play state changes
   useEffect(() => {
     if (isPlaying) {
-      const soundType = getTrackSoundType(track.name);
-      play({ type: soundType, volume: isMuted ? 0 : volume[0] / 100 });
+      play({ instrument: track.instrument, volume: isMuted ? 0 : volume[0] / 100 });
     } else {
       stop();
     }
@@ -43,7 +30,7 @@ const MeditationPlayer = ({ track, moodName, onNext, onPrevious }: MeditationPla
     return () => {
       stop();
     };
-  }, [isPlaying, track.name]);
+  }, [isPlaying, track.instrument]);
 
   // Update volume
   useEffect(() => {
@@ -56,14 +43,12 @@ const MeditationPlayer = ({ track, moodName, onNext, onPrevious }: MeditationPla
   const handleNext = () => {
     stop();
     setIsPlaying(false);
-    setProgress([0]);
     onNext?.();
   };
 
   const handlePrevious = () => {
     stop();
     setIsPlaying(false);
-    setProgress([0]);
     onPrevious?.();
   };
 
@@ -79,25 +64,27 @@ const MeditationPlayer = ({ track, moodName, onNext, onPrevious }: MeditationPla
         {isPlaying && (
           <div className="mt-3 flex items-center justify-center gap-2">
             <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            <span className="text-xs text-green-600 dark:text-green-400">Playing ambient music</span>
+            <span className="text-xs text-green-600 dark:text-green-400">Divine music playing • Loops continuously</span>
           </div>
         )}
       </div>
 
-      {/* Progress Bar */}
-      <div className="mb-6">
-        <Slider
-          value={progress}
-          onValueChange={setProgress}
-          max={100}
-          step={1}
-          className="w-full"
-        />
-        <div className="flex justify-between text-xs text-muted-foreground mt-2">
-          <span>0:00</span>
-          <span>{track.duration}</span>
+      {/* Ambient Visualizer */}
+      {isPlaying && (
+        <div className="mb-6 flex items-center justify-center gap-1">
+          {[...Array(7)].map((_, i) => (
+            <div
+              key={i}
+              className="w-1 bg-primary/60 rounded-full animate-pulse"
+              style={{
+                height: `${20 + Math.random() * 30}px`,
+                animationDelay: `${i * 0.1}s`,
+                animationDuration: `${0.5 + Math.random() * 0.5}s`
+              }}
+            />
+          ))}
         </div>
-      </div>
+      )}
 
       {/* Controls */}
       <div className="flex items-center justify-center gap-4 mb-6">
@@ -133,7 +120,7 @@ const MeditationPlayer = ({ track, moodName, onNext, onPrevious }: MeditationPla
       </div>
 
       {/* Volume Control */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center justify-center gap-3">
         <Button
           variant="ghost"
           size="icon"
@@ -147,12 +134,12 @@ const MeditationPlayer = ({ track, moodName, onNext, onPrevious }: MeditationPla
           onValueChange={setVolumeState}
           max={100}
           step={1}
-          className="w-24"
+          className="w-32"
         />
       </div>
 
       <p className="text-center text-xs text-muted-foreground mt-4 italic">
-        Close your eyes, breathe deeply, and let the music guide you to inner peace.
+        🕉️ Close your eyes, breathe deeply, and let the divine music guide you to inner peace.
       </p>
     </Card>
   );

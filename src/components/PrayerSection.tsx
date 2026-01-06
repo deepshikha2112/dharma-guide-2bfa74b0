@@ -1,37 +1,35 @@
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Slider } from "@/components/ui/slider";
 import { BookOpen, Volume2, Pause, Play, ChevronDown, ChevronUp, VolumeX, Music } from "lucide-react";
 import { Prayer } from "@/data/prayers";
-import { useAmbientSound, SoundType } from "@/hooks/useAmbientSound";
+import { useDivineAudio, InstrumentType } from "@/hooks/useDivineAudio";
 
 interface PrayerSectionProps {
   prayers: Prayer[];
   deityName: string;
 }
 
-// Map prayer types to ambient sounds
-const getPrayerSoundType = (type: Prayer['type']): SoundType => {
+const getPrayerInstrument = (type: Prayer['type']): InstrumentType => {
   switch (type) {
     case 'aarti': return 'bells';
     case 'chalisa': return 'tanpura';
     case 'stotram': return 'om';
-    default: return 'meditation';
+    default: return 'flute';
   }
 };
 
 const PrayerSection = ({ prayers, deityName }: PrayerSectionProps) => {
-  const { play, stop, setVolume, isPlaying: isMusicPlaying } = useAmbientSound();
+  const { play, stop, setVolume, isPlaying: isMusicPlaying } = useDivineAudio();
   const [mode, setMode] = useState<"read" | "listen">("read");
   const [expandedPrayer, setExpandedPrayer] = useState<string | null>(prayers[0]?.id || null);
   const [playingPrayer, setPlayingPrayer] = useState<string | null>(null);
   const [volume, setVolumeState] = useState(0.4);
   const [isMuted, setIsMuted] = useState(false);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       stop();
@@ -47,8 +45,8 @@ const PrayerSection = ({ prayers, deityName }: PrayerSectionProps) => {
       stop();
       setPlayingPrayer(null);
     } else {
-      const soundType = getPrayerSoundType(prayer.type);
-      play({ type: soundType, volume: isMuted ? 0 : volume });
+      const instrument = getPrayerInstrument(prayer.type);
+      play({ instrument, volume: isMuted ? 0 : volume });
       setPlayingPrayer(prayer.id);
     }
   };
@@ -107,7 +105,6 @@ const PrayerSection = ({ prayers, deityName }: PrayerSectionProps) => {
       <div className="space-y-3">
         {prayers.map((prayer) => (
           <Card key={prayer.id} className="overflow-hidden">
-            {/* Prayer Header */}
             <button
               onClick={() => toggleExpand(prayer.id)}
               className="w-full p-4 flex items-center justify-between hover:bg-muted/30 transition-colors"
@@ -138,7 +135,6 @@ const PrayerSection = ({ prayers, deityName }: PrayerSectionProps) => {
               )}
             </button>
 
-            {/* Expanded Content */}
             {expandedPrayer === prayer.id && (
               <div className="px-4 pb-4 animate-fade-in">
                 {mode === "listen" && (
@@ -158,7 +154,7 @@ const PrayerSection = ({ prayers, deityName }: PrayerSectionProps) => {
                         </Button>
                         <div>
                           <p className="text-sm font-medium text-foreground">
-                            {playingPrayer === prayer.id ? "Devotional music playing..." : "Tap to play ambient music"}
+                            {playingPrayer === prayer.id ? "Divine music playing..." : "Play ambient music"}
                           </p>
                           <p className="text-xs text-muted-foreground">
                             Instrumental {getTypeLabel(prayer.type).toLowerCase()} ambience
