@@ -373,143 +373,177 @@ The goddess Saraswati represents this hidden stream of wisdom. Through meditatio
     chapters: [
       {
         id: "rama-1",
-        title: "The Divine Birth in Ayodhya",
-        subtitle: "श्री राम जन्म - Rama Janma",
+        title: "श्री राम जन्म",
+        subtitle: "Divine Birth in Ayodhya",
         mood: "divine",
         instrument: "tanpura",
-        content: `King Dasharatha of Ayodhya performed the Putrakameshti Yagna (sacrifice for sons) under Sage Rishyashringa's guidance. From the sacred fire emerged a divine being carrying a bowl of kheer (sacred pudding). The three queens - Kaushalya, Kaikeyi, and Sumitra - consumed the prasad and were blessed with sons.
+        content: `भए प्रगट कृपाला दीनदयाला कौसल्या हितकारी।
+हरषित महतारी मुनि मन हारी अद्भुत रूप बिचारी॥
 
-Rama was born to Kaushalya on the ninth day of Chaitra (Ram Navami). His three brothers - Bharata, Lakshmana, and Shatrughna - followed. The kingdom rejoiced at the prince who embodied divinity.
+लोचन अभिरामा तनु घनस्यामा निज आयुध भुज चारी।
+भूषन बनमाला नयन बिसाला सोभासिंधु खरारी॥
 
-The gods showered flowers from heaven. Celestial music filled the skies. The moment of Rama's birth marked a new era - the Supreme Lord had descended to Earth to establish dharma and destroy the demon king Ravana.
+अयोध्या के राजा दशरथ ने पुत्रेष्टि यज्ञ का आयोजन किया। ऋष्यश्रृंग मुनि ने यज्ञ संपन्न कराया। अग्निकुंड से एक दिव्य पुरुष प्रकट हुए, जो स्वर्ण पात्र में खीर लिए थे।
 
-Even as a child, Rama radiated divine grace. His dark complexion like rain clouds, lotus eyes, and gentle smile captivated all who beheld him. The prophecy was clear - this was no ordinary prince.`
+तीनों रानियों - कौशल्या, कैकेयी और सुमित्रा ने प्रसाद ग्रहण किया। चैत्र शुक्ल नवमी को, पुनर्वसु नक्षत्र में, कर्क लग्न में श्री राम का जन्म हुआ।
+
+देवता पुष्प वर्षा करने लगे। गंधर्व गान करने लगे। अयोध्या में आनंद की लहर दौड़ पड़ी। भगवान विष्णु ने मर्यादा पुरुषोत्तम के रूप में अवतार लिया था।`
       },
       {
         id: "rama-2",
-        title: "Training with Sage Vishwamitra",
-        subtitle: "गुरु शिक्षा - Divine Education",
+        title: "विश्वामित्र आगमन",
+        subtitle: "Sage Vishwamitra's Arrival",
         mood: "powerful",
         instrument: "mantra-rhythm",
-        content: `When Sage Vishwamitra sought King Dasharatha's help against demons disrupting his sacrifices, he asked for young Rama. Though the king was reluctant to send his beloved son, Sage Vasishtha counseled him to comply.
+        content: `विश्वामित्र महामुनि राजा दशरथ के दरबार में पधारे। उन्होंने कहा - "हे राजन! मेरे यज्ञ में राक्षस विघ्न डालते हैं। अपने पुत्र राम को मेरे साथ भेजो।"
 
-Rama and Lakshmana accompanied Vishwamitra to his ashrama. Along the way, Rama slew the demoness Tataka with a single arrow, demonstrating his divine prowess. At the sage's ashrama, he protected the sacred yagna from Maricha and Subahu.
+दशरथ ने कहा - "मुनिवर! राम अभी बालक है। मैं स्वयं सेना लेकर चलूंगा।" परंतु वशिष्ठ मुनि ने समझाया - "राजन! राम साधारण बालक नहीं। वे साक्षात् नारायण हैं।"
 
-Vishwamitra, pleased with Rama's devotion and valor, taught him powerful astras (divine weapons) including the Brahmastra. He also gave Rama the mantras Bala and Atibala, which eliminated hunger and fatigue.
+राम और लक्ष्मण मुनि के साथ वन को चले। मार्ग में ताड़का राक्षसी ने आक्रमण किया। राम ने एक ही बाण से उसका वध किया।
 
-This journey transformed the young prince into a warrior sage. Under Vishwamitra's guidance, Rama learned that true power comes with responsibility - weapons are meant to protect dharma, not to destroy.`
+विश्वामित्र ने राम को बला और अतिबला विद्या प्रदान की। फिर दिव्यास्त्रों का ज्ञान दिया। यज्ञ रक्षा करते हुए राम ने मारीच को समुद्र पार फेंका और सुबाहु का वध किया।`
       },
       {
         id: "rama-3",
-        title: "The Marriage with Sita",
-        subtitle: "सीता स्वयंवर - Sita Swayamvar",
+        title: "सीता स्वयंवर",
+        subtitle: "Marriage with Sita",
         mood: "happy",
         instrument: "flute",
-        content: `In Mithila, King Janaka had organized a swayamvar for his daughter Sita. The condition was extraordinary - whoever could string the divine bow of Lord Shiva would win Sita's hand. Kings and warriors from far and wide had tried and failed; none could even move the massive bow.
+        content: `जनक नंदिनी सीता का स्वयंवर मिथिला में आयोजित था। शिव धनुष को उठाकर प्रत्यंचा चढ़ाने की शर्त थी। अनेक राजा-महाराजा आए, परंतु कोई भी धनुष हिला न सका।
 
-When Rama entered the assembly with Vishwamitra, Sita's heart was captivated. She silently prayed that this prince with lotus eyes would be her lord.
+राम ने गुरु की आज्ञा ली। धनुष की परिक्रमा की। फिर एक हाथ से उठाकर प्रत्यंचा चढ़ाई। धनुष भंग हो गया। तीनों लोक कांप उठे।
 
-Rama approached the bow with calm confidence. With effortless grace, he lifted it as if it were a flower. As he strung it, the mighty bow broke in two with a thunderclap that shook the three worlds.
+सीता ने जयमाला राम के गले में डाली। देवताओं ने पुष्प वर्षा की। भरत, लक्ष्मण और शत्रुघ्न का भी विवाह हुआ।
 
-The wedding of Rama and Sita was celebrated with unparalleled splendor. Their union represents the eternal bond between the soul (Sita) and the Supreme (Rama). Together, they embody the ideal of divine love - faithful, pure, and eternal.`
+सीताराम विवाह - यह प्रकृति और पुरुष का मिलन था। जीव और ब्रह्म का संयोग था। यह विवाह सनातन है, शाश्वत है।
+
+मंगल भवन अमंगल हारी। द्रवहु सु दसरथ अजिर बिहारी॥`
       },
       {
         id: "rama-4",
-        title: "The Exile to the Forest",
-        subtitle: "वनवास - Vanvas",
+        title: "वनवास",
+        subtitle: "Exile to the Forest",
         mood: "sad",
         instrument: "tanpura",
-        content: `On the eve of Rama's coronation, Queen Kaikeyi, influenced by her maid Manthara, demanded two boons from King Dasharatha. She asked that Bharata be crowned king and Rama be exiled to the forest for fourteen years.
+        content: `राम राज्याभिषेक की तैयारी थी। समस्त अयोध्या आनंदित थी। परंतु विधि का विधान कुछ और था।
 
-Bound by his promise, the devastated king had no choice. When Rama learned of this, he accepted the exile with complete equanimity. His words were serene: "Father's word is my dharma. I shall gladly go to the forest."
+कैकेयी ने दो वर मांगे - भरत को राज्य और राम को चौदह वर्ष का वनवास। दशरथ मूर्छित हो गए। परंतु राम मुस्कुराए।
 
-Sita insisted on accompanying her husband, declaring that a wife's place is beside her husband in joy or sorrow. Lakshmana too could not bear to be separated from his beloved brother.
+राम ने कहा - "पिता की आज्ञा शिरोधार्य है। वनवास मेरे लिए महोत्सव है।"
 
-Thus, the three departed for the Dandaka forest, trading royal garments for bark cloth. Ayodhya wept. King Dasharatha died of grief. Yet Rama walked forward, teaching the world that honor and dharma are greater than any throne.`
+सीता ने कहा - "पति के बिना स्वर्ग भी नरक है। मैं साथ चलूंगी।" लक्ष्मण ने कहा - "बिना भैया के मैं एक क्षण भी नहीं रह सकता।"
+
+तीनों ने राजवस्त्र त्यागे, वल्कल धारण किए। अयोध्या रो पड़ी। दशरथ ने प्राण त्याग दिए।
+
+रघुकुल रीति सदा चलि आई। प्राण जाहुं बरु बचनु न जाई॥`
       },
       {
         id: "rama-5",
-        title: "Sita's Abduction",
-        subtitle: "सीता हरण - The Great Tragedy",
+        title: "सीता हरण",
+        subtitle: "Abduction of Sita",
         mood: "sad",
         instrument: "tanpura",
-        content: `In the forest of Panchavati, the demon princess Shurpanakha became enamored with Rama. When she attacked Sita in jealousy, Lakshmana cut off her nose and ears. She fled to her brother Ravana, the mighty king of Lanka.
+        content: `पंचवटी में शूर्पणखा आई। राम पर मोहित हुई। जब उसने सीता पर आक्रमण किया, लक्ष्मण ने उसके नाक-कान काट दिए।
 
-Ravana devised a plan. He sent the demon Maricha as a golden deer to lure Rama away. When Rama pursued the deer, Sita heard a cry imitating Rama's voice and sent Lakshmana to help.
+रावण ने प्रतिशोध की योजना बनाई। मारीच को स्वर्ण मृग बनाकर भेजा। सीता ने हठ किया - "मुझे यह मृग चाहिए।"
 
-Left alone, Sita was approached by Ravana disguised as a sage. When she offered him hospitality, he revealed his true form and abducted her in his flying chariot.
+राम मृग के पीछे गए। मारीच ने राम की आवाज में पुकारा। सीता ने लक्ष्मण को भेज दिया।
 
-The vulture king Jatayu fought bravely to save Sita but was mortally wounded. Dying, he told Rama what had happened. Rama performed Jatayu's last rites with his own hands, honoring the bird's supreme sacrifice.`
+रावण साधु वेष में आया। सीता ने आतिथ्य किया। रावण ने अपना रूप दिखाया और सीता को उठाकर पुष्पक विमान में ले गया।
+
+जटायु ने रोका, लड़ा, परंतु रावण ने उसके पंख काट दिए। मरते हुए जटायु ने राम को सारी बात बताई। राम ने उनका अंतिम संस्कार पुत्रवत् किया।`
       },
       {
         id: "rama-6",
-        title: "The Search and Alliance",
-        subtitle: "सुग्रीव मैत्री - Friendship with Sugriva",
+        title: "हनुमान मिलन",
+        subtitle: "Meeting with Hanuman",
         mood: "devotional",
         instrument: "tanpura",
-        content: `Wandering in search of Sita, Rama and Lakshmana reached Rishyamukha mountain where they met Hanuman. This meeting was destined - the greatest devotee met his beloved Lord.
+        content: `राम और लक्ष्मण सीता की खोज में भटक रहे थे। ऋष्यमूक पर्वत पर सुग्रीव का राज्य था। सुग्रीव ने हनुमान को भेजा।
 
-Hanuman was minister to Sugriva, an exiled monkey king. Rama agreed to help Sugriva regain his kingdom from his brother Vali in exchange for help finding Sita.
+हनुमान ब्राह्मण वेश में आए। राम को देखते ही उनका हृदय भक्ति से भर गया। यह मिलन युगों-युगों का था।
 
-Rama slew Vali from behind a tree - a controversial act that demonstrated his commitment to his word. Sugriva was reinstated as king and mobilized his entire army to search for Sita.
+राम ने कहा - "तुम्हारी वाणी में वेद की गरिमा है।" हनुमान ने अपना रूप प्रकट किया और राम के चरणों में गिर पड़े।
 
-The search parties went in all directions. It was Hanuman who finally discovered that Sita had been taken across the ocean to Lanka. The stage was set for the greatest adventure in history - a monkey's leap across the sea.`
+सुग्रीव से मित्रता हुई। राम ने बालि का वध किया। वानर सेना सीता की खोज में चारों दिशाओं में गई।
+
+संपाति ने बताया कि सीता लंका में हैं। समुद्र पार करना था। जामवंत ने हनुमान को उनकी शक्ति याद दिलाई।
+
+हनुमान ने विराट रूप धारण किया और "जय श्री राम" के उद्घोष के साथ समुद्र लांघ गए।`
       },
       {
         id: "rama-7",
-        title: "Hanuman's Leap to Lanka",
-        subtitle: "हनुमान की उड़ान - The Great Leap",
+        title: "लंका दहन",
+        subtitle: "Burning of Lanka",
         mood: "powerful",
         instrument: "mantra-rhythm",
-        content: `Standing at the southern shore, Hanuman expanded his form to an enormous size. With a mighty roar of "Jai Shri Ram!", he leaped across the ocean to Lanka.
+        content: `हनुमान ने अशोक वाटिका में सीता माता को खोजा। राम की अंगूठी दी। माता ने चूड़ामणि दी।
 
-In Lanka, Hanuman found Sita in the Ashoka grove, surrounded by demonesses. He gave her Rama's ring as proof of his identity and assured her that rescue was coming. Sita gave Hanuman her chudamani (hair ornament) to carry back to Rama.
+हनुमान ने सोचा - "रावण की शक्ति का आकलन करना चाहिए।" उन्होंने वाटिका उजाड़ दी। राक्षसों को मारा। अक्षय कुमार का वध किया।
 
-To test Ravana's strength, Hanuman allowed himself to be captured. Brought before the demon king, he delivered Rama's message with bold courage. When Ravana ordered his tail set on fire, Hanuman used the flames to burn Lanka.
+मेघनाद ने ब्रह्मास्त्र से बांधा। रावण के दरबार में लाए गए। हनुमान ने निर्भय होकर राम का संदेश दिया।
 
-Returning to Rama, Hanuman brought hope. His devotion had accomplished what seemed impossible. The news he carried ignited the fire of victory in Rama's army.`
+रावण ने पूंछ में आग लगाने का आदेश दिया। हनुमान ने पूंछ बढ़ाई। जितना कपड़ा लपेटते, पूंछ उतनी बढ़ती।
+
+फिर हनुमान ने लंका में आग लगा दी। स्वर्ण नगरी जल उठी। समुद्र में पूंछ बुझाकर वे वापस लौटे।
+
+राम राम रटते जग जाना। बालि बध किन्हों भगवाना॥`
       },
       {
         id: "rama-8",
-        title: "The Bridge to Lanka",
-        subtitle: "राम सेतु - The Divine Bridge",
+        title: "सेतु बंधन",
+        subtitle: "Building the Bridge",
         mood: "powerful",
         instrument: "mantra-rhythm",
-        content: `To cross the ocean, the monkey army built a bridge under the supervision of Nala and Neela. The engineering marvel was made of stones that floated when inscribed with Rama's name.
+        content: `वानर सेना समुद्र तट पर पहुंची। सागर पार करना था। राम ने तीन दिन समुद्र की प्रार्थना की। जब समुद्र न माना, राम ने धनुष उठाया।
 
-Vibhishana, Ravana's righteous brother, defected to Rama's side, providing crucial intelligence about Lanka's defenses. Rama welcomed him as a brother and promised him the throne of Lanka.
+समुद्र प्रकट हुआ और बोला - "प्रभु! नल और नील में वरदान है। वे जो पत्थर डालेंगे, तैरेंगे।"
 
-The army crossed the bridge and laid siege to Lanka. Ravana sent his warriors one by one - Meghnad (Indrajit), Kumbhakarna, and others. Each battle was fierce, but Rama's forces prevailed.
+"राम" नाम लिखकर पत्थर डाले गए। पांच दिनों में सेतु बन गया। यह रामसेतु आज भी है।
 
-Lakshmana was struck down by Indrajit's shakti weapon. Hanuman flew to the Himalayas and brought the entire Sanjeevani mountain to save him. Such was the devotion of Hanuman - when one herb was needed, he brought the whole mountain.`
+विभीषण रावण का भाई था, परंतु धर्म का पक्षधर था। उसने रावण को समझाया, परंतु रावण न माना। विभीषण राम की शरण आए। राम ने उन्हें लंका का राज्य देने का वचन दिया।
+
+सेना ने सेतु पार किया। लंका को घेर लिया। महायुद्ध आरंभ हुआ।`
       },
       {
         id: "rama-9",
-        title: "The Great Battle",
-        subtitle: "राम-रावण युद्ध - Rama vs Ravana",
+        title: "राम-रावण युद्ध",
+        subtitle: "The Great Battle",
         mood: "powerful",
         instrument: "mantra-rhythm",
-        content: `The final battle between Rama and Ravana shook the three worlds. Ravana possessed ten heads and twenty arms. He was blessed with boons that made him nearly invincible.
+        content: `भयंकर युद्ध हुआ। कुंभकर्ण, मेघनाद, अतिकाय - एक-एक करके सब मारे गए।
 
-The duel lasted for days. Every time Rama cut off Ravana's head, another grew in its place. Finally, Sage Agastya reminded Rama of the Aditya Hridayam - a hymn to the Sun God.
+मेघनाद ने शक्ति से लक्ष्मण को मूर्छित किया। हनुमान एक ही रात में हिमालय गए और संजीवनी बूटी लाए। लक्ष्मण जी उठे।
 
-After reciting this divine prayer, Rama charged his bow with the Brahmastra. The arrow, blazing with the fire of all creation, struck Ravana's navel - where the nectar of immortality was stored.
+अंतिम युद्ध राम और रावण के बीच हुआ। रावण के दस सिर थे, बीस भुजाएं थीं। जितने सिर कटते, उतने उग आते।
 
-Ravana fell. Even in death, he was mourned as a great scholar and devotee of Shiva who had been corrupted by pride. His soul merged with the divine light of Rama, for ultimately all souls return to their source.`
+विभीषण ने बताया - "नाभि में अमृत है।" अगस्त्य मुनि ने आदित्य हृदयम् का पाठ कराया। राम ने ब्रह्मास्त्र चलाया।
+
+बाण ने रावण की नाभि भेदी। रावण गिर पड़ा। विजय हुई। देवताओं ने जय-जयकार किया।
+
+रामचंद्र कृपालु भजु मन हरण भवभय दारुणम्।
+नवकंज लोचन कंज मुख कर कंज पद कंजारुणम्॥`
       },
       {
         id: "rama-10",
-        title: "Return to Ayodhya",
-        subtitle: "राम राज्य - The Ideal Kingdom",
+        title: "अयोध्या वापसी - राम राज्य",
+        subtitle: "Return to Ayodhya - Ram Rajya",
         mood: "happy",
         instrument: "flute",
-        content: `After reuniting with Sita and accepting Vibhishana's homage, Rama prepared to return home. The fourteen years of exile had ended. Bharata, who had refused to sit on the throne, ruling only as Rama's regent, awaited eagerly.
+        content: `सीता से पुनर्मिलन हुआ। विभीषण का राज्याभिषेक हुआ। पुष्पक विमान में राम, सीता, लक्ष्मण और सभी वानर अयोध्या की ओर चले।
 
-The Pushpaka Vimana (flying chariot) carried Rama, Sita, Lakshmana, Hanuman, and others back to Ayodhya. The citizens lit millions of lamps to welcome their king - the origin of Diwali, the festival of lights.
+भरत चौदह वर्ष से राम की पादुका रखकर शासन कर रहे थे। जब सुना कि राम आ रहे हैं, समस्त अयोध्या सज गई।
 
-Rama's coronation was celebrated with unmatched joy. He established Rama Rajya - the ideal kingdom where dharma prevailed, where the weak were protected, and where prosperity blessed all.
+दीपमाला जलाई गई। यही दीपावली की शुरुआत थी। राम का राज्याभिषेक हुआ। राम राज्य की स्थापना हुई।
 
-Lord Rama's life teaches us that dharma must be upheld even at the greatest personal cost. His name itself is a mantra that liberates the soul. Ram Ram Ram - the sound that echoes through eternity.`
+राम राज्य में कोई दुखी न था। न अकाल, न महामारी। धर्म चारों चरणों पर चलता था। प्रजा सुखी थी, संतुष्ट थी।
+
+मंगल भवन अमंगल हारी। द्रवहु सु दसरथ अजिर बिहारी॥
+राम सीता बिहारी जय बोलो हनुमान की।
+जय हो प्रभु श्री राम की॥
+
+जो सुमिरत सिधि होई, गननायक करिबर बदन।
+करहु अनुग्रह सोई, बुद्धि रासि सुभ गुन सदन॥`
       }
     ]
   }
