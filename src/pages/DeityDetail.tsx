@@ -22,7 +22,24 @@ const DeityDetail = () => {
   const { id } = useParams<{ id: string }>();
   const deity = getDeityById(id || "");
   const prayers = deity ? getPrayersByDeityId(deity.id) : [];
-  const chapters = deity ? getChaptersByDeityId(deity.id) : [];
+
+  // Chapters with audio support:
+  // 1) Prefer curated scripture chapters (src/data/deityChapters.ts)
+  // 2) Fallback to the basic deity chapters (src/data/deities.ts)
+  const curatedChapters = deity ? getChaptersByDeityId(deity.id) : [];
+  const chapters = deity
+    ? curatedChapters.length > 0
+      ? curatedChapters
+      : deity.chapters.map((c) => ({
+          id: `${deity.id}-${c.id}`,
+          title: c.title,
+          subtitle: `Chapter ${c.id}`,
+          content: c.content,
+          mood: "devotional" as const,
+          instrument: "tanpura" as const,
+        }))
+    : [];
+
   const [selectedMantra, setSelectedMantra] = useState(0);
   const [selectedMood, setSelectedMood] = useState(meditationMoods[0]);
   const [selectedTrack, setSelectedTrack] = useState(meditationMoods[0].tracks[0]);
@@ -126,50 +143,7 @@ const DeityDetail = () => {
               </Card>
 
               {/* Chapter Audio Reader - Divine stories with ambient music */}
-              {chapters.length > 0 ? (
-                <ChapterAudioReader chapters={chapters} deityName={deity.name} />
-              ) : (
-                <>
-                  <h2 className="font-heading text-2xl font-bold text-foreground mb-6 flex items-center">
-                    <BookOpen className="w-6 h-6 mr-3 text-primary" />
-                    Divine Life Story
-                  </h2>
-                  
-                  <Tabs defaultValue="1" className="w-full">
-                    <ScrollArea className="w-full whitespace-nowrap pb-4">
-                      <TabsList className="inline-flex w-auto bg-muted/50 p-1">
-                        {deity.chapters.map((chapter) => (
-                          <TabsTrigger 
-                            key={chapter.id} 
-                            value={chapter.id.toString()}
-                            className="px-4 py-2 whitespace-nowrap data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-                          >
-                            Ch. {chapter.id}
-                          </TabsTrigger>
-                        ))}
-                      </TabsList>
-                    </ScrollArea>
-                    
-                    {deity.chapters.map((chapter) => (
-                      <TabsContent key={chapter.id} value={chapter.id.toString()}>
-                        <Card className="p-6 md:p-8 animate-fade-in">
-                          <div className="flex items-center gap-3 mb-6">
-                            <span className="w-10 h-10 rounded-full bg-primary/20 text-primary font-bold flex items-center justify-center">
-                              {chapter.id}
-                            </span>
-                            <h3 className="font-heading text-xl md:text-2xl font-semibold text-foreground">
-                              {chapter.title}
-                            </h3>
-                          </div>
-                          <p className="text-foreground/90 leading-relaxed text-lg whitespace-pre-line">
-                            {chapter.content}
-                          </p>
-                        </Card>
-                      </TabsContent>
-                    ))}
-                  </Tabs>
-                </>
-              )}
+              <ChapterAudioReader chapters={chapters} deityName={deity.name} />
 
               {/* Life Lesson */}
               <Card className="p-6 md:p-8 mt-8 bg-gradient-to-r from-primary/10 to-accent/10 border-primary/20">
