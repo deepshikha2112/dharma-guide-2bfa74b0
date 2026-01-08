@@ -227,23 +227,23 @@ const Guidance = () => {
           
           {/* Mode Selection */}
           {mode === "select" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
+            <div className="grid grid-cols-2 gap-4 md:gap-6 animate-fade-in">
               <Card 
-                className="p-6 md:p-8 cursor-pointer hover:border-primary hover:shadow-lg transition-all group"
+                className="p-4 md:p-8 cursor-pointer hover:border-primary hover:shadow-lg transition-all group"
                 onClick={() => setMode("personal")}
               >
-                <div className="text-center space-y-4">
-                  <div className="w-20 h-20 mx-auto rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                    <Sparkles className="w-10 h-10 text-primary" />
+                <div className="text-center space-y-3 md:space-y-4">
+                  <div className="w-14 h-14 md:w-20 md:h-20 mx-auto rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                    <Sparkles className="w-7 h-7 md:w-10 md:h-10 text-primary" />
                   </div>
-                  <h3 className="font-heading text-2xl font-semibold text-foreground">
+                  <h3 className="font-heading text-lg md:text-2xl font-semibold text-foreground">
                     व्यक्तिगत भविष्यवाणी
                   </h3>
-                  <p className="text-lg text-primary font-medium">Personal Prediction</p>
-                  <p className="text-muted-foreground">
+                  <p className="text-sm md:text-lg text-primary font-medium">Personal Prediction</p>
+                  <p className="hidden sm:block text-muted-foreground">
                     करियर, विवाह, स्वास्थ्य, धन और जीवन की समस्याओं का समाधान
                   </p>
-                  <div className="flex flex-wrap gap-2 justify-center pt-2">
+                  <div className="hidden sm:flex flex-wrap gap-2 justify-center pt-2">
                     <span className="px-3 py-1 bg-muted rounded-full text-xs">💼 Career</span>
                     <span className="px-3 py-1 bg-muted rounded-full text-xs">💍 Marriage</span>
                     <span className="px-3 py-1 bg-muted rounded-full text-xs">💰 Finance</span>
@@ -253,21 +253,21 @@ const Guidance = () => {
               </Card>
 
               <Card 
-                className="p-6 md:p-8 cursor-pointer hover:border-primary hover:shadow-lg transition-all group"
+                className="p-4 md:p-8 cursor-pointer hover:border-primary hover:shadow-lg transition-all group"
                 onClick={() => navigate("/compatibility")}
               >
-                <div className="text-center space-y-4">
-                  <div className="w-20 h-20 mx-auto rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                    <Heart className="w-10 h-10 text-primary" />
+                <div className="text-center space-y-3 md:space-y-4">
+                  <div className="w-14 h-14 md:w-20 md:h-20 mx-auto rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                    <Heart className="w-7 h-7 md:w-10 md:h-10 text-primary" />
                   </div>
-                  <h3 className="font-heading text-2xl font-semibold text-foreground">
+                  <h3 className="font-heading text-lg md:text-2xl font-semibold text-foreground">
                     कुंडली मिलान
                   </h3>
-                  <p className="text-lg text-primary font-medium">Kundali Matching</p>
-                  <p className="text-muted-foreground">
+                  <p className="text-sm md:text-lg text-primary font-medium">Kundali Matching</p>
+                  <p className="hidden sm:block text-muted-foreground">
                     गुण मिलान, संबंध अनुकूलता और भविष्य का विश्लेषण
                   </p>
-                  <div className="flex flex-wrap gap-2 justify-center pt-2">
+                  <div className="hidden sm:flex flex-wrap gap-2 justify-center pt-2">
                     <span className="px-3 py-1 bg-muted rounded-full text-xs">💕 36 गुण</span>
                     <span className="px-3 py-1 bg-muted rounded-full text-xs">🔮 भविष्य</span>
                     <span className="px-3 py-1 bg-muted rounded-full text-xs">✨ उपाय</span>
@@ -280,6 +280,25 @@ const Guidance = () => {
           {/* Personal Prediction Flow */}
           {mode === "personal" && (
             <div className="max-w-2xl mx-auto">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 mb-4">
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    setMode("select");
+                    setStep(0);
+                  }}
+                  className="justify-start"
+                >
+                  ← Back to Services
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => navigate("/compatibility")}
+                >
+                  Kundali Matching
+                </Button>
+              </div>
+
               {/* Language Selection - Step 0 */}
               {step === 0 && (
                 <Card className="p-6 md:p-8 animate-fade-in">
