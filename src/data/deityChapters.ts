@@ -1,5 +1,7 @@
 import { Chapter } from '@/components/ChapterAudioReader';
 import { shivPuranChapters, ShivPuranChapter } from './shivPuranChapters';
+import { lakshmiPuranChapters, LakshmiPuranChapter } from './lakshmiPuranChapters';
+import { deviSaptashatiChapters, DeviSaptashatiChapter } from './deviSaptashatiChapters';
 
 export interface DeityChapters {
   deityId: string;
@@ -12,6 +14,28 @@ const convertShivPuranChapters = (): Chapter[] => {
     id: chapter.id,
     title: chapter.titleHindi,
     subtitle: `${chapter.khandHindi} - अध्याय ${chapter.chapterNumber}`,
+    mood: chapter.mood,
+    instrument: chapter.instrument,
+    content: chapter.content,
+  }));
+};
+
+const convertLakshmiPuranChapters = (): Chapter[] => {
+  return lakshmiPuranChapters.map((chapter: LakshmiPuranChapter) => ({
+    id: chapter.id,
+    title: chapter.titleHindi || chapter.titleEnglish,
+    subtitle: chapter.titleEnglish,
+    mood: chapter.mood,
+    instrument: chapter.instrument,
+    content: chapter.content,
+  }));
+};
+
+const convertDeviSaptashatiChapters = (): Chapter[] => {
+  return deviSaptashatiChapters.map((chapter: DeviSaptashatiChapter) => ({
+    id: chapter.id,
+    title: chapter.titleHindi || chapter.titleEnglish,
+    subtitle: chapter.titleEnglish,
     mood: chapter.mood,
     instrument: chapter.instrument,
     content: chapter.content,
@@ -255,85 +279,11 @@ Building by building, palace by palace, Hanuman burned Lanka with his flaming ta
   },
   {
     deityId: "durga",
-    chapters: [
-      {
-        id: "d1",
-        title: "The Birth of the Goddess",
-        subtitle: "When the Divine Feminine arose",
-        mood: "powerful",
-        instrument: "tanpura",
-        content: `The demon Mahishasura had obtained a boon that no man or god could kill him. With this power, he conquered the three worlds, driving the gods from heaven. In desperation, the gods gathered and combined their divine energies.
-
-From their collective power emerged a brilliant light. This light took the form of a magnificent goddess with ten arms - Durga, the invincible one. She was more beautiful than any being in creation and more powerful than all the gods combined.
-
-Each god contributed their weapons and attributes. Shiva gave his trident, Vishnu his discus, Agni his flames, Vayu his bow, Indra his thunderbolt. Himavat gave her a lion as her mount.
-
-Thus armed with the powers of the entire universe, Goddess Durga set forth to battle Mahishasura and restore balance to creation.`
-      },
-      {
-        id: "d2",
-        title: "The Battle with Mahishasura",
-        subtitle: "The great cosmic war",
-        mood: "powerful",
-        instrument: "bells",
-        content: `For nine days and nights, Durga battled the demon armies. She was a whirlwind of divine fury, destroying demons by the thousands. Her lion roared, shaking the foundations of the universe.
-
-Mahishasura sent his mightiest generals, but each fell before the Goddess. He sent magical illusions, but Durga saw through them all. Finally, the buffalo demon himself entered the battlefield, changing forms constantly to confuse her.
-
-He became a lion; Durga cut off his head. He became an elephant; she sliced his trunk. He transformed into a buffalo again, and as he emerged from the beast's body as a man, Durga seized him.
-
-Standing upon his chest, she drove her trident through his heart. The universe rejoiced as evil was vanquished. The gods showered flowers from heaven, and creation was restored to balance.`
-      },
-      {
-        id: "d3",
-        title: "The Nine Forms",
-        subtitle: "Navadurga - the nine nights of the Goddess",
-        mood: "devotional",
-        instrument: "om",
-        content: `During Navratri, we worship the nine forms of Durga, each representing a different aspect of the Divine Mother.
-
-Shailaputri, daughter of the mountains, represents purity and devotion. Brahmacharini embodies knowledge and penance. Chandraghanta, with her moon-shaped bell, symbolizes beauty and bravery.
-
-Kushmanda created the universe with her divine smile. Skandamata is the mother of Kartikeya. Katyayani is the warrior aspect born in sage Katyayana's home. Kalaratri is the fierce destroyer of evil.
-
-Mahagauri is the embodiment of purity and serenity. Finally, Siddhidatri grants all spiritual powers and fulfillment.
-
-Together, these nine forms represent the complete journey of the soul - from devotion through struggle to ultimate enlightenment. By worshipping each form, devotees invoke these qualities within themselves.`
-      }
-    ]
+    chapters: convertDeviSaptashatiChapters()
   },
   {
     deityId: "lakshmi",
-    chapters: [
-      {
-        id: "l1",
-        title: "The Emergence from the Ocean",
-        subtitle: "Lakshmi's divine origin",
-        mood: "divine",
-        instrument: "flute",
-        content: `When gods and demons churned the cosmic ocean for the nectar of immortality, many treasures emerged from the depths. Among them was the most radiant of all - Goddess Lakshmi.
-
-She emerged seated on a lotus, adorned with gold, radiating light that illuminated all three worlds. The heavenly elephants bathed her with sacred waters. Divine flowers rained from the sky.
-
-Both gods and demons desired her as their consort, but Lakshmi chose Lord Vishnu. She garlanded him with a lotus garland, signifying her eternal devotion. From that moment, she became his constant companion.
-
-Wherever Vishnu incarnates, Lakshmi accompanies him. She was Sita with Rama, Rukmini with Krishna. She is the divine energy that sustains and enriches all of creation.`
-      },
-      {
-        id: "l2",
-        title: "The Eight Forms of Wealth",
-        subtitle: "Ashtalakshmi - blessings for all aspects of life",
-        mood: "peaceful",
-        instrument: "bells",
-        content: `Lakshmi manifests in eight forms, blessing devotees with different aspects of prosperity and well-being.
-
-Adi Lakshmi is the primordial form, the mother of all creation. Dhana Lakshmi bestows material wealth and gold. Dhanya Lakshmi blesses with abundance of food and grains. Gaja Lakshmi, flanked by elephants, grants royal power and grace.
-
-Santana Lakshmi blesses families with children and the continuity of lineage. Veera Lakshmi gives courage and victory in life's battles. Vijaya Lakshmi ensures success in all endeavors.
-
-Vidya Lakshmi grants knowledge and wisdom, the greatest of all treasures. Together, these eight forms remind us that true prosperity encompasses all aspects of life - material, spiritual, intellectual, and emotional.`
-      }
-    ]
+    chapters: convertLakshmiPuranChapters()
   },
   {
     deityId: "saraswati",
