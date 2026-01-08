@@ -2,3 +2,6 @@ project_id = "xmbiipmzfopitwztjsvw"
 
 [functions.elevenlabs-tts]
 verify_jwt = false
+
+[functions.divine-guidance]
+verify_jwt = false
