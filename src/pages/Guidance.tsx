@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getRashiFromDate, rashis } from "@/data/deities";
-import { Sparkles, User, Calendar, MapPin, Clock, Heart, MessageCircle, Loader2, Globe, HelpCircle } from "lucide-react";
+import { Sparkles, User, Calendar, MapPin, Clock, Heart, MessageCircle, Loader2, Globe, HelpCircle, Users } from "lucide-react";
 import { toast } from "sonner";
 
 interface UserProfile {
@@ -35,6 +35,7 @@ const problemCategories = [
 
 const Guidance = () => {
   const navigate = useNavigate();
+  const [mode, setMode] = useState<"select" | "personal" | "compatibility">("select");
   const [language, setLanguage] = useState<"hindi" | "english" | null>(null);
   const [step, setStep] = useState(0); // 0 = language selection
   const [profile, setProfile] = useState<UserProfile>({
@@ -184,6 +185,7 @@ const Guidance = () => {
 
   const resetForm = () => {
     setStep(0);
+    setMode("select");
     setLanguage(null);
     setGuidance("");
     setProfile({
@@ -206,48 +208,107 @@ const Guidance = () => {
         <div className="container mx-auto px-4 text-center">
           <Sparkles className="w-12 h-12 mx-auto text-primary mb-4" />
           <h1 className="font-heading text-4xl md:text-5xl font-bold text-foreground mb-4">
-            {isHindi ? "ज्योतिष मार्गदर्शन" : language === "english" ? "Astrology Guidance" : "ज्योतिष मार्गदर्शन | Astrology Guidance"}
+            {mode === "select" 
+              ? "ज्योतिष सेवाएं | Astrology Services"
+              : (isHindi ? "ज्योतिष मार्गदर्शन" : "Astrology Guidance")
+            }
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            {isHindi 
-              ? "वैदिक ज्योतिष के आधार पर अपने जीवन की समस्याओं का समाधान पाएं।"
-              : language === "english" 
-                ? "Get solutions to your life problems based on Vedic Astrology."
-                : "वैदिक ज्योतिष के आधार पर जीवन की समस्याओं का समाधान पाएं।"
+            {mode === "select" 
+              ? "वैदिक ज्योतिष की शक्ति से अपने जीवन को समझें।"
+              : (isHindi ? "वैदिक ज्योतिष के आधार पर जीवन की समस्याओं का समाधान पाएं।" : "Get solutions to your life problems based on Vedic Astrology.")
             }
           </p>
         </div>
       </section>
 
       <section className="py-12">
-        <div className="container mx-auto px-4 max-w-2xl">
+        <div className="container mx-auto px-4 max-w-4xl">
           
-          {/* Language Selection - Step 0 */}
-          {step === 0 && (
-            <Card className="p-6 md:p-8 animate-fade-in">
-              <h2 className="font-heading text-2xl font-semibold text-foreground mb-6 flex items-center justify-center">
-                <Globe className="w-6 h-6 mr-2 text-primary" />
-                Select Your Language / भाषा चुनें
-              </h2>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <Button
-                  variant="outline"
-                  className="h-24 text-xl font-semibold hover:bg-primary hover:text-primary-foreground transition-all"
-                  onClick={() => { setLanguage("hindi"); setStep(1); }}
-                >
-                  🇮🇳 हिंदी
-                </Button>
-                <Button
-                  variant="outline"
-                  className="h-24 text-xl font-semibold hover:bg-primary hover:text-primary-foreground transition-all"
-                  onClick={() => { setLanguage("english"); setStep(1); }}
-                >
-                  🇬🇧 English
-                </Button>
-              </div>
-            </Card>
+          {/* Mode Selection */}
+          {mode === "select" && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
+              <Card 
+                className="p-6 md:p-8 cursor-pointer hover:border-primary hover:shadow-lg transition-all group"
+                onClick={() => setMode("personal")}
+              >
+                <div className="text-center space-y-4">
+                  <div className="w-20 h-20 mx-auto rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                    <Sparkles className="w-10 h-10 text-primary" />
+                  </div>
+                  <h3 className="font-heading text-2xl font-semibold text-foreground">
+                    व्यक्तिगत भविष्यवाणी
+                  </h3>
+                  <p className="text-lg text-primary font-medium">Personal Prediction</p>
+                  <p className="text-muted-foreground">
+                    करियर, विवाह, स्वास्थ्य, धन और जीवन की समस्याओं का समाधान
+                  </p>
+                  <div className="flex flex-wrap gap-2 justify-center pt-2">
+                    <span className="px-3 py-1 bg-muted rounded-full text-xs">💼 Career</span>
+                    <span className="px-3 py-1 bg-muted rounded-full text-xs">💍 Marriage</span>
+                    <span className="px-3 py-1 bg-muted rounded-full text-xs">💰 Finance</span>
+                    <span className="px-3 py-1 bg-muted rounded-full text-xs">❤️ Love</span>
+                  </div>
+                </div>
+              </Card>
+
+              <Card 
+                className="p-6 md:p-8 cursor-pointer hover:border-primary hover:shadow-lg transition-all group"
+                onClick={() => navigate("/compatibility")}
+              >
+                <div className="text-center space-y-4">
+                  <div className="w-20 h-20 mx-auto rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                    <Heart className="w-10 h-10 text-primary" />
+                  </div>
+                  <h3 className="font-heading text-2xl font-semibold text-foreground">
+                    कुंडली मिलान
+                  </h3>
+                  <p className="text-lg text-primary font-medium">Kundali Matching</p>
+                  <p className="text-muted-foreground">
+                    गुण मिलान, संबंध अनुकूलता और भविष्य का विश्लेषण
+                  </p>
+                  <div className="flex flex-wrap gap-2 justify-center pt-2">
+                    <span className="px-3 py-1 bg-muted rounded-full text-xs">💕 36 गुण</span>
+                    <span className="px-3 py-1 bg-muted rounded-full text-xs">🔮 भविष्य</span>
+                    <span className="px-3 py-1 bg-muted rounded-full text-xs">✨ उपाय</span>
+                  </div>
+                </div>
+              </Card>
+            </div>
           )}
+
+          {/* Personal Prediction Flow */}
+          {mode === "personal" && (
+            <div className="max-w-2xl mx-auto">
+              {/* Language Selection - Step 0 */}
+              {step === 0 && (
+                <Card className="p-6 md:p-8 animate-fade-in">
+                  <h2 className="font-heading text-2xl font-semibold text-foreground mb-6 flex items-center justify-center">
+                    <Globe className="w-6 h-6 mr-2 text-primary" />
+                    Select Your Language / भाषा चुनें
+                  </h2>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <Button
+                      variant="outline"
+                      className="h-24 text-xl font-semibold hover:bg-primary hover:text-primary-foreground transition-all"
+                      onClick={() => { setLanguage("hindi"); setStep(1); }}
+                    >
+                      🇮🇳 हिंदी
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="h-24 text-xl font-semibold hover:bg-primary hover:text-primary-foreground transition-all"
+                      onClick={() => { setLanguage("english"); setStep(1); }}
+                    >
+                      🇬🇧 English
+                    </Button>
+                  </div>
+                  <Button variant="ghost" onClick={() => setMode("select")} className="w-full">
+                    ← Back to Services
+                  </Button>
+                </Card>
+              )}
 
           {/* Progress Steps for steps 1-3 */}
           {step >= 1 && step <= 3 && (
@@ -582,6 +643,8 @@ const Guidance = () => {
                 </div>
               )}
             </Card>
+          )}
+            </div>
           )}
         </div>
       </section>
