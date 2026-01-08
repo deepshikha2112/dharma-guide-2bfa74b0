@@ -20,7 +20,6 @@ interface UserProfile {
   problem: string;
 }
 
-const GUIDANCE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/divine-guidance`;
 
 const Guidance = () => {
   const navigate = useNavigate();
@@ -54,12 +53,24 @@ const Guidance = () => {
     setGuidance("");
     setStep(4);
 
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    
+    if (!supabaseUrl || !supabaseKey) {
+      console.error("Missing environment variables");
+      toast.error("सर्वर कॉन्फ़िगरेशन में त्रुटि है।");
+      setStep(3);
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const resp = await fetch(GUIDANCE_URL, {
+      console.log("Calling divine-guidance function...");
+      const resp = await fetch(`${supabaseUrl}/functions/v1/divine-guidance`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          "Authorization": `Bearer ${supabaseKey}`,
         },
         body: JSON.stringify({
           name: profile.name,
@@ -70,8 +81,11 @@ const Guidance = () => {
         }),
       });
 
+      console.log("Response status:", resp.status);
+
       if (!resp.ok) {
         const errorData = await resp.json().catch(() => ({}));
+        console.error("Error response:", errorData);
         throw new Error(errorData.error || "मार्गदर्शन प्राप्त करने में त्रुटि हुई");
       }
 
@@ -132,6 +146,10 @@ const Guidance = () => {
             }
           } catch { /* ignore */ }
         }
+      }
+      
+      if (!fullText) {
+        throw new Error("कोई मार्गदर्शन प्राप्त नहीं हुआ। कृपया पुनः प्रयास करें।");
       }
     } catch (error) {
       console.error("Guidance error:", error);
