@@ -124,6 +124,9 @@ const ChapterAudioReader = ({ chapters, deityName }: ChapterAudioReaderProps) =>
       powerful: '⚡ Powerful',
       emotional: '💙 Emotional',
       divine: '✨ Divine',
+      sleep: '😴 Sleep',
+      focus: '🧘 Focus',
+      energy: '🔥 Energy',
     };
     return labels[mood] || '🎵 Ambient';
   };

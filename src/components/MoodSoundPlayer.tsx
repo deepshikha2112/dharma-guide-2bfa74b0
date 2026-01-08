@@ -14,13 +14,14 @@ interface MoodOption {
 }
 
 const moodOptions: MoodOption[] = [
-  { mood: 'peaceful', label: 'Peaceful', description: 'Calm, serene ambient', icon: '☮️' },
-  { mood: 'stressed', label: 'Stressed', description: 'Water & calming sounds', icon: '🌊' },
-  { mood: 'sad', label: 'Sad', description: 'Gentle, comforting tones', icon: '💙' },
-  { mood: 'angry', label: 'Angry', description: 'Grounding, deep tones', icon: '🔥' },
-  { mood: 'anxious', label: 'Anxious', description: 'Binaural alpha waves', icon: '🧘' },
-  { mood: 'happy', label: 'Happy', description: 'Uplifting, bright sounds', icon: '✨' },
-  { mood: 'devotional', label: 'Devotional', description: 'Sacred Om & temple', icon: '🙏' },
+  { mood: 'peaceful', label: 'Calm', description: 'Flute, tanpura, stillness', icon: '😌' },
+  { mood: 'stressed', label: 'Stress Relief', description: 'Piano, pads, grounding', icon: '😟' },
+  { mood: 'sad', label: 'Healing', description: 'Violin, strings, release', icon: '😢' },
+  { mood: 'sleep', label: 'Sleep', description: 'Deep drones, chimes', icon: '😴' },
+  { mood: 'focus', label: 'Focus', description: 'Singing bowls, bells', icon: '🧘' },
+  { mood: 'energy', label: 'Energy', description: 'Light percussion, beats', icon: '🔥' },
+  { mood: 'happy', label: 'Happy', description: 'Bright, uplifting tones', icon: '✨' },
+  { mood: 'devotional', label: 'Devotional', description: 'Sacred Om, temple bells', icon: '🙏' },
 ];
 
 interface MoodSoundPlayerProps {
@@ -100,7 +101,7 @@ const MoodSoundPlayer = ({ compact = false, className }: MoodSoundPlayerProps) =
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {moodOptions.map((option) => (
             <button
               key={option.mood}
