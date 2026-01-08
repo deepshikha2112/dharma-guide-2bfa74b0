@@ -50,6 +50,8 @@ const Guidance = () => {
   });
   const [guidance, setGuidance] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionActive, setSessionActive] = useState(false); // Session memory flag
+  const [askingNewQuestion, setAskingNewQuestion] = useState(false); // For asking another question
 
   const isHindi = language === "hindi";
 
@@ -71,6 +73,7 @@ const Guidance = () => {
     setIsLoading(true);
     setGuidance("");
     setStep(4);
+    setSessionActive(true); // Mark session as active after first prediction
 
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -188,6 +191,8 @@ const Guidance = () => {
     setMode("select");
     setLanguage(null);
     setGuidance("");
+    setSessionActive(false);
+    setAskingNewQuestion(false);
     setProfile({
       name: "",
       dateOfBirth: "",
@@ -198,6 +203,14 @@ const Guidance = () => {
       problem: "",
       rashi: ""
     });
+  };
+
+  // Ask another question (keep birth details, reset question only)
+  const askAnotherQuestion = () => {
+    setGuidance("");
+    setProfile(prev => ({ ...prev, problemCategory: "", problem: "" }));
+    setAskingNewQuestion(true);
+    setStep(5); // New step for asking another question
   };
 
   return (
@@ -605,62 +618,110 @@ const Guidance = () => {
 
               {!isLoading && guidance && (
                 <div className="mt-8 space-y-4">
-                  {/* Follow-up Options */}
-                  <div className="p-4 bg-muted/50 rounded-lg">
-                    <p className="font-semibold text-foreground mb-3">
-                      {isHindi ? "और जानना चाहते हैं?" : "Want to know more?"}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => {
-                          setProfile(prev => ({ ...prev, problemCategory: "marriage", problem: isHindi ? "मेरी शादी कब होगी? विवाह योग कब बनेगा?" : "When will I get married? When is the marriage yoga?" }));
-                          setStep(3);
-                        }}
-                      >
-                        {isHindi ? "💍 विवाह समय" : "💍 Marriage Timing"}
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => {
-                          setProfile(prev => ({ ...prev, problemCategory: "career", problem: isHindi ? "अगले साल करियर में क्या होगा? नौकरी/प्रमोशन?" : "What about career next year? Job/Promotion?" }));
-                          setStep(3);
-                        }}
-                      >
-                        {isHindi ? "💼 करियर मार्गदर्शन" : "💼 Career Guidance"}
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => {
-                          setProfile(prev => ({ ...prev, problemCategory: "finance", problem: isHindi ? "धन और आर्थिक स्थिति कैसी रहेगी?" : "How will be my financial situation?" }));
-                          setStep(3);
-                        }}
-                      >
-                        {isHindi ? "💰 धन योग" : "💰 Wealth Forecast"}
-                      </Button>
-                    </div>
+                  {/* Session Active Label */}
+                  <div className="flex items-center justify-center gap-2 text-sm text-primary">
+                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                    {isHindi ? "सत्र सक्रिय है" : "Session Active"}
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-4">
+                  {/* Two Options Only */}
+                  <div className="flex flex-col gap-3">
                     <Button 
-                      variant="outline" 
-                      onClick={resetForm}
-                      className="flex-1"
+                      onClick={askAnotherQuestion}
+                      className="w-full h-14 text-lg"
                     >
-                      {isHindi ? "नया सत्र शुरू करें" : "Start New Session"}
+                      1️⃣ {isHindi ? "और प्रश्न पूछें" : "Ask Another Question"}
                     </Button>
                     <Button 
-                      onClick={() => navigate("/")}
-                      className="flex-1"
+                      variant="outline"
+                      onClick={() => {
+                        resetForm();
+                        navigate("/");
+                      }}
+                      className="w-full h-14 text-lg"
                     >
-                      {isHindi ? "होम पेज पर जाएं" : "Go to Home"}
+                      2️⃣ {isHindi ? "सत्र समाप्त करें और होम जाएं" : "End Session & Go to Home"}
                     </Button>
                   </div>
                 </div>
               )}
+            </Card>
+          )}
+
+          {/* Step 5: Ask Another Question (Session Mode) */}
+          {step === 5 && sessionActive && (
+            <Card className="p-6 md:p-8 animate-fade-in">
+              {/* Session Info */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2 text-sm text-primary">
+                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                  {isHindi ? "सत्र सक्रिय है" : "Session Active"}
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  {profile.name} • {selectedRashi?.symbol} {profile.rashi}
+                </div>
+              </div>
+
+              <h2 className="font-heading text-2xl font-semibold text-foreground mb-6 flex items-center">
+                <HelpCircle className="w-6 h-6 mr-2 text-primary" />
+                {isHindi ? "अगला प्रश्न पूछें" : "Ask Your Next Question"}
+              </h2>
+              
+              <div className="space-y-5">
+                <div>
+                  <Label>{isHindi ? "समस्या का क्षेत्र *" : "Problem Category *"}</Label>
+                  <Select 
+                    value={profile.problemCategory} 
+                    onValueChange={(value) => setProfile(prev => ({ ...prev, problemCategory: value }))}
+                  >
+                    <SelectTrigger className="mt-2">
+                      <SelectValue placeholder={isHindi ? "समस्या का क्षेत्र चुनें" : "Select problem category"} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {problemCategories.map((cat) => (
+                        <SelectItem key={cat.id} value={cat.id}>
+                          {isHindi ? cat.labelHi : cat.labelEn}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label htmlFor="newQuestion">{isHindi ? "अपना प्रश्न लिखें *" : "Write Your Question *"}</Label>
+                  <Textarea
+                    id="newQuestion"
+                    placeholder={isHindi 
+                      ? "अपना अगला प्रश्न यहाँ लिखें..."
+                      : "Write your next question here..."
+                    }
+                    value={profile.problem}
+                    onChange={(e) => setProfile(prev => ({ ...prev, problem: e.target.value }))}
+                    className="mt-2 min-h-[100px]"
+                  />
+                </div>
+
+                <div className="flex gap-4">
+                  <Button 
+                    variant="outline"
+                    onClick={() => {
+                      resetForm();
+                      navigate("/");
+                    }}
+                    className="flex-1"
+                  >
+                    {isHindi ? "सत्र समाप्त करें" : "End Session"}
+                  </Button>
+                  <Button 
+                    onClick={streamGuidance}
+                    disabled={!profile.problemCategory || !profile.problem || isLoading}
+                    className="flex-1"
+                  >
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    {isHindi ? "उत्तर प्राप्त करें" : "Get Answer"}
+                  </Button>
+                </div>
+              </div>
             </Card>
           )}
             </div>
