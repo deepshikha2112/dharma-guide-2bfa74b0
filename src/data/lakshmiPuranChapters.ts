@@ -74,7 +74,7 @@ Thursdays are foremost among all days. When Shukla Dashami falls on a Thursday, 
     chapterNumber: 3,
     titleHindi: "लक्ष्मी व्रत की विधि",
     titleEnglish: "The Method of Lakshmi Vrat",
-    mood: "calm",
+    mood: "peaceful",
     instrument: "flute",
     content: `Narada further asked Parashara Muni: "Who performed this Lakshmi vrat on earth? What auspicious fruits did they receive? Who neglected Lakshmi and suffered? Tell me all this, O great sage, for my heart is eager to hear."
 

@@ -370,3 +370,4 @@ const ChapterAudioReader = ({ chapters, deityName }: ChapterAudioReaderProps) =>
 export default ChapterAudioReader;
 
 export type { Chapter };
+export type { MoodType, InstrumentType } from '@/hooks/useDivineAudio';
