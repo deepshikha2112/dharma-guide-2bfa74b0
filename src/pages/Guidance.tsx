@@ -8,31 +8,49 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { deities, getRashiFromDate, rashis } from "@/data/deities";
-import { Sparkles, User, Calendar, Star, Heart, MessageCircle, Loader2 } from "lucide-react";
+import { getRashiFromDate, rashis } from "@/data/deities";
+import { Sparkles, User, Calendar, MapPin, Clock, Heart, MessageCircle, Loader2, Globe, HelpCircle } from "lucide-react";
 import { toast } from "sonner";
 
 interface UserProfile {
   name: string;
-  devotedDeity: string;
   dateOfBirth: string;
-  rashi: string;
+  timeOfBirth: string;
+  placeOfBirth: string;
+  gender: string;
+  problemCategory: string;
   problem: string;
+  rashi: string;
 }
 
+const problemCategories = [
+  { id: "career", labelHi: "करियर / नौकरी", labelEn: "Career / Job" },
+  { id: "love", labelHi: "प्रेम / रिश्ते", labelEn: "Love / Relationships" },
+  { id: "marriage", labelHi: "विवाह", labelEn: "Marriage" },
+  { id: "finance", labelHi: "आर्थिक / धन", labelEn: "Finance / Money" },
+  { id: "health", labelHi: "स्वास्थ्य", labelEn: "Health" },
+  { id: "education", labelHi: "शिक्षा", labelEn: "Education" },
+  { id: "family", labelHi: "परिवार", labelEn: "Family" },
+];
 
 const Guidance = () => {
   const navigate = useNavigate();
-  const [step, setStep] = useState(1);
+  const [language, setLanguage] = useState<"hindi" | "english" | null>(null);
+  const [step, setStep] = useState(0); // 0 = language selection
   const [profile, setProfile] = useState<UserProfile>({
     name: "",
-    devotedDeity: "",
     dateOfBirth: "",
-    rashi: "",
-    problem: ""
+    timeOfBirth: "",
+    placeOfBirth: "",
+    gender: "",
+    problemCategory: "",
+    problem: "",
+    rashi: ""
   });
   const [guidance, setGuidance] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const isHindi = language === "hindi";
 
   const handleDateChange = (dateStr: string) => {
     setProfile(prev => ({ ...prev, dateOfBirth: dateStr }));
@@ -45,8 +63,8 @@ const Guidance = () => {
     }
   };
 
-  const selectedDeity = deities.find(d => d.id === profile.devotedDeity);
   const selectedRashi = rashis.find(r => r.name === profile.rashi);
+  const selectedCategory = problemCategories.find(c => c.id === profile.problemCategory);
 
   const streamGuidance = useCallback(async () => {
     setIsLoading(true);
@@ -58,7 +76,7 @@ const Guidance = () => {
     
     if (!supabaseUrl || !supabaseKey) {
       console.error("Missing environment variables");
-      toast.error("सर्वर कॉन्फ़िगरेशन में त्रुटि है।");
+      toast.error(isHindi ? "सर्वर कॉन्फ़िगरेशन में त्रुटि है।" : "Server configuration error.");
       setStep(3);
       setIsLoading(false);
       return;
@@ -74,10 +92,14 @@ const Guidance = () => {
         },
         body: JSON.stringify({
           name: profile.name,
-          devotedDeity: profile.devotedDeity,
-          rashi: profile.rashi,
+          dateOfBirth: profile.dateOfBirth,
+          timeOfBirth: profile.timeOfBirth,
+          placeOfBirth: profile.placeOfBirth,
+          gender: profile.gender,
+          problemCategory: profile.problemCategory,
           problem: profile.problem,
-          language: "hindi"
+          rashi: profile.rashi,
+          language: language
         }),
       });
 
@@ -86,10 +108,10 @@ const Guidance = () => {
       if (!resp.ok) {
         const errorData = await resp.json().catch(() => ({}));
         console.error("Error response:", errorData);
-        throw new Error(errorData.error || "मार्गदर्शन प्राप्त करने में त्रुटि हुई");
+        throw new Error(errorData.error || (isHindi ? "मार्गदर्शन प्राप्त करने में त्रुटि हुई" : "Error getting guidance"));
       }
 
-      if (!resp.body) throw new Error("No response stream");
+      if (!resp.body) throw new Error(isHindi ? "कोई उत्तर नहीं मिला" : "No response received");
 
       const reader = resp.body.getReader();
       const decoder = new TextDecoder();
@@ -149,16 +171,32 @@ const Guidance = () => {
       }
       
       if (!fullText) {
-        throw new Error("कोई मार्गदर्शन प्राप्त नहीं हुआ। कृपया पुनः प्रयास करें।");
+        throw new Error(isHindi ? "कोई मार्गदर्शन प्राप्त नहीं हुआ। कृपया पुनः प्रयास करें।" : "No guidance received. Please try again.");
       }
     } catch (error) {
       console.error("Guidance error:", error);
-      toast.error(error instanceof Error ? error.message : "कुछ गलत हो गया। कृपया पुनः प्रयास करें।");
+      toast.error(error instanceof Error ? error.message : (isHindi ? "कुछ गलत हो गया। कृपया पुनः प्रयास करें।" : "Something went wrong. Please try again."));
       setStep(3);
     } finally {
       setIsLoading(false);
     }
-  }, [profile]);
+  }, [profile, language, isHindi]);
+
+  const resetForm = () => {
+    setStep(0);
+    setLanguage(null);
+    setGuidance("");
+    setProfile({
+      name: "",
+      dateOfBirth: "",
+      timeOfBirth: "",
+      placeOfBirth: "",
+      gender: "",
+      problemCategory: "",
+      problem: "",
+      rashi: ""
+    });
+  };
 
   return (
     <main className="min-h-screen bg-background">
@@ -168,52 +206,87 @@ const Guidance = () => {
         <div className="container mx-auto px-4 text-center">
           <Sparkles className="w-12 h-12 mx-auto text-primary mb-4" />
           <h1 className="font-heading text-4xl md:text-5xl font-bold text-foreground mb-4">
-            दिव्य मार्गदर्शन
+            {isHindi ? "ज्योतिष मार्गदर्शन" : language === "english" ? "Astrology Guidance" : "ज्योतिष मार्गदर्शन | Astrology Guidance"}
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            अपने आराध्य देव से सीधे मार्गदर्शन प्राप्त करें। वे आपकी समस्या सुनेंगे और आपको राह दिखाएंगे।
+            {isHindi 
+              ? "वैदिक ज्योतिष के आधार पर अपने जीवन की समस्याओं का समाधान पाएं।"
+              : language === "english" 
+                ? "Get solutions to your life problems based on Vedic Astrology."
+                : "वैदिक ज्योतिष के आधार पर जीवन की समस्याओं का समाधान पाएं।"
+            }
           </p>
         </div>
       </section>
 
       <section className="py-12">
         <div className="container mx-auto px-4 max-w-2xl">
-          {/* Progress Steps */}
-          <div className="flex justify-center mb-12">
-            <div className="flex items-center gap-4">
-              {[1, 2, 3].map((s) => (
-                <div key={s} className="flex items-center">
-                  <div 
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
-                      step >= s 
-                        ? 'bg-primary text-primary-foreground' 
-                        : 'bg-muted text-muted-foreground'
-                    }`}
-                  >
-                    {s}
-                  </div>
-                  {s < 3 && (
-                    <div className={`w-16 h-1 mx-2 ${step > s ? 'bg-primary' : 'bg-muted'}`} />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+          
+          {/* Language Selection - Step 0 */}
+          {step === 0 && (
+            <Card className="p-6 md:p-8 animate-fade-in">
+              <h2 className="font-heading text-2xl font-semibold text-foreground mb-6 flex items-center justify-center">
+                <Globe className="w-6 h-6 mr-2 text-primary" />
+                Select Your Language / भाषा चुनें
+              </h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Button
+                  variant="outline"
+                  className="h-24 text-xl font-semibold hover:bg-primary hover:text-primary-foreground transition-all"
+                  onClick={() => { setLanguage("hindi"); setStep(1); }}
+                >
+                  🇮🇳 हिंदी
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-24 text-xl font-semibold hover:bg-primary hover:text-primary-foreground transition-all"
+                  onClick={() => { setLanguage("english"); setStep(1); }}
+                >
+                  🇬🇧 English
+                </Button>
+              </div>
+            </Card>
+          )}
 
-          {/* Step 1: Basic Info */}
+          {/* Progress Steps for steps 1-3 */}
+          {step >= 1 && step <= 3 && (
+            <div className="flex justify-center mb-12">
+              <div className="flex items-center gap-4">
+                {[1, 2, 3].map((s) => (
+                  <div key={s} className="flex items-center">
+                    <div 
+                      className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-colors ${
+                        step >= s 
+                          ? 'bg-primary text-primary-foreground' 
+                          : 'bg-muted text-muted-foreground'
+                      }`}
+                    >
+                      {s}
+                    </div>
+                    {s < 3 && (
+                      <div className={`w-16 h-1 mx-2 ${step > s ? 'bg-primary' : 'bg-muted'}`} />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Step 1: Personal Details */}
           {step === 1 && (
             <Card className="p-6 md:p-8 animate-fade-in">
               <h2 className="font-heading text-2xl font-semibold text-foreground mb-6 flex items-center">
                 <User className="w-6 h-6 mr-2 text-primary" />
-                अपना परिचय दें
+                {isHindi ? "व्यक्तिगत विवरण" : "Personal Details"}
               </h2>
               
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div>
-                  <Label htmlFor="name">आपका नाम</Label>
+                  <Label htmlFor="name">{isHindi ? "पूर्ण नाम *" : "Full Name *"}</Label>
                   <Input
                     id="name"
-                    placeholder="अपना नाम लिखें"
+                    placeholder={isHindi ? "अपना पूरा नाम लिखें" : "Enter your full name"}
                     value={profile.name}
                     onChange={(e) => setProfile(prev => ({ ...prev, name: e.target.value }))}
                     className="mt-2"
@@ -221,46 +294,49 @@ const Guidance = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="deity">आपके आराध्य देव / गुरु</Label>
+                  <Label htmlFor="gender">{isHindi ? "लिंग" : "Gender"}</Label>
                   <Select 
-                    value={profile.devotedDeity} 
-                    onValueChange={(value) => setProfile(prev => ({ ...prev, devotedDeity: value }))}
+                    value={profile.gender} 
+                    onValueChange={(value) => setProfile(prev => ({ ...prev, gender: value }))}
                   >
                     <SelectTrigger className="mt-2">
-                      <SelectValue placeholder="अपने आराध्य देव चुनें" />
+                      <SelectValue placeholder={isHindi ? "लिंग चुनें (वैकल्पिक)" : "Select gender (optional)"} />
                     </SelectTrigger>
                     <SelectContent>
-                      {deities.map((deity) => (
-                        <SelectItem key={deity.id} value={deity.id}>
-                          {deity.emoji} {deity.name} ({deity.sanskrit})
-                        </SelectItem>
-                      ))}
+                      <SelectItem value="male">{isHindi ? "पुरुष" : "Male"}</SelectItem>
+                      <SelectItem value="female">{isHindi ? "महिला" : "Female"}</SelectItem>
+                      <SelectItem value="other">{isHindi ? "अन्य" : "Other"}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
-                <Button 
-                  onClick={() => setStep(2)}
-                  disabled={!profile.name || !profile.devotedDeity}
-                  className="w-full"
-                >
-                  आगे बढ़ें
-                </Button>
+                <div className="flex gap-4">
+                  <Button variant="outline" onClick={() => setStep(0)} className="flex-1">
+                    {isHindi ? "भाषा बदलें" : "Change Language"}
+                  </Button>
+                  <Button 
+                    onClick={() => setStep(2)}
+                    disabled={!profile.name}
+                    className="flex-1"
+                  >
+                    {isHindi ? "आगे बढ़ें" : "Continue"}
+                  </Button>
+                </div>
               </div>
             </Card>
           )}
 
-          {/* Step 2: Date & Rashi */}
+          {/* Step 2: Birth Details */}
           {step === 2 && (
             <Card className="p-6 md:p-8 animate-fade-in">
               <h2 className="font-heading text-2xl font-semibold text-foreground mb-6 flex items-center">
                 <Calendar className="w-6 h-6 mr-2 text-primary" />
-                जन्म विवरण
+                {isHindi ? "जन्म विवरण" : "Birth Details"}
               </h2>
               
-              <div className="space-y-6">
+              <div className="space-y-5">
                 <div>
-                  <Label htmlFor="dob">जन्म तिथि</Label>
+                  <Label htmlFor="dob">{isHindi ? "जन्म तिथि *" : "Date of Birth *"}</Label>
                   <Input
                     id="dob"
                     type="date"
@@ -270,14 +346,46 @@ const Guidance = () => {
                   />
                 </div>
 
+                <div>
+                  <Label htmlFor="tob" className="flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
+                    {isHindi ? "जन्म समय" : "Time of Birth"}
+                  </Label>
+                  <Input
+                    id="tob"
+                    type="time"
+                    value={profile.timeOfBirth}
+                    onChange={(e) => setProfile(prev => ({ ...prev, timeOfBirth: e.target.value }))}
+                    className="mt-2"
+                    placeholder={isHindi ? "उदाहरण: 10:30 AM" : "Example: 10:30 AM"}
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {isHindi ? "(सटीक समय से बेहतर भविष्यवाणी मिलती है)" : "(Accurate time gives better predictions)"}
+                  </p>
+                </div>
+
+                <div>
+                  <Label htmlFor="pob" className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4" />
+                    {isHindi ? "जन्म स्थान *" : "Place of Birth *"}
+                  </Label>
+                  <Input
+                    id="pob"
+                    placeholder={isHindi ? "शहर, राज्य, देश" : "City, State, Country"}
+                    value={profile.placeOfBirth}
+                    onChange={(e) => setProfile(prev => ({ ...prev, placeOfBirth: e.target.value }))}
+                    className="mt-2"
+                  />
+                </div>
+
                 {profile.rashi && (
                   <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
                     <div className="flex items-center gap-3">
-                      <Star className="w-6 h-6 text-primary" />
+                      <span className="text-2xl">{selectedRashi?.symbol}</span>
                       <div>
-                        <p className="text-sm text-muted-foreground">आपकी राशि</p>
+                        <p className="text-sm text-muted-foreground">{isHindi ? "आपकी चंद्र राशि" : "Your Moon Sign"}</p>
                         <p className="font-heading text-xl font-semibold text-foreground">
-                          {selectedRashi?.symbol} {profile.rashi} ({selectedRashi?.sanskrit})
+                          {selectedRashi?.sanskrit} ({profile.rashi})
                         </p>
                       </div>
                     </div>
@@ -286,14 +394,14 @@ const Guidance = () => {
 
                 <div className="flex gap-4">
                   <Button variant="outline" onClick={() => setStep(1)} className="flex-1">
-                    पीछे जाएं
+                    {isHindi ? "पीछे जाएं" : "Go Back"}
                   </Button>
                   <Button 
                     onClick={() => setStep(3)}
-                    disabled={!profile.dateOfBirth}
+                    disabled={!profile.dateOfBirth || !profile.placeOfBirth}
                     className="flex-1"
                   >
-                    आगे बढ़ें
+                    {isHindi ? "आगे बढ़ें" : "Continue"}
                   </Button>
                 </div>
               </div>
@@ -304,65 +412,93 @@ const Guidance = () => {
           {step === 3 && (
             <Card className="p-6 md:p-8 animate-fade-in">
               <h2 className="font-heading text-2xl font-semibold text-foreground mb-6 flex items-center">
-                <Heart className="w-6 h-6 mr-2 text-primary" />
-                अपनी समस्या बताएं
+                <HelpCircle className="w-6 h-6 mr-2 text-primary" />
+                {isHindi ? "अपनी समस्या बताएं" : "Describe Your Problem"}
               </h2>
               
-              <div className="space-y-6">
-                <div className="p-4 bg-muted/50 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-1">मार्गदर्शन प्राप्त करेंगे</p>
-                  <p className="font-heading text-lg font-semibold text-foreground">
-                    {selectedDeity?.emoji} {selectedDeity?.name} से
-                  </p>
+              <div className="space-y-5">
+                <div>
+                  <Label>{isHindi ? "समस्या का क्षेत्र *" : "Problem Category *"}</Label>
+                  <Select 
+                    value={profile.problemCategory} 
+                    onValueChange={(value) => setProfile(prev => ({ ...prev, problemCategory: value }))}
+                  >
+                    <SelectTrigger className="mt-2">
+                      <SelectValue placeholder={isHindi ? "समस्या का क्षेत्र चुनें" : "Select problem category"} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {problemCategories.map((cat) => (
+                        <SelectItem key={cat.id} value={cat.id}>
+                          {isHindi ? cat.labelHi : cat.labelEn}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div>
-                  <Label htmlFor="problem">जीवन में क्या कठिनाई है?</Label>
+                  <Label htmlFor="problem">{isHindi ? "विस्तार से बताएं *" : "Describe in Detail *"}</Label>
                   <Textarea
                     id="problem"
-                    placeholder="अपनी चिंता, समस्या या प्रश्न यहाँ लिखें। आपके आराध्य देव आपको मार्गदर्शन देंगे..."
+                    placeholder={isHindi 
+                      ? "अपनी समस्या या प्रश्न यहाँ विस्तार से लिखें। जैसे: मेरी शादी कब होगी? करियर में आगे कैसे बढ़ूं?"
+                      : "Describe your problem or question in detail. E.g.: When will I get married? How to progress in career?"
+                    }
                     value={profile.problem}
                     onChange={(e) => setProfile(prev => ({ ...prev, problem: e.target.value }))}
-                    className="mt-2 min-h-[150px]"
+                    className="mt-2 min-h-[120px]"
                   />
-                  <p className="text-xs text-muted-foreground mt-2">
-                    आपकी समस्या पूर्णतः गोपनीय रखी जाएगी।
-                  </p>
+                </div>
+
+                {/* Summary */}
+                <div className="p-4 bg-muted/50 rounded-lg space-y-2">
+                  <p className="font-semibold text-foreground">{isHindi ? "आपका विवरण:" : "Your Details:"}</p>
+                  <div className="text-sm text-muted-foreground space-y-1">
+                    <p>👤 {profile.name}</p>
+                    <p>📅 {profile.dateOfBirth} {profile.timeOfBirth && `| ${profile.timeOfBirth}`}</p>
+                    <p>📍 {profile.placeOfBirth}</p>
+                    {profile.rashi && <p>⭐ {selectedRashi?.symbol} {selectedRashi?.sanskrit} ({profile.rashi})</p>}
+                  </div>
                 </div>
 
                 <div className="flex gap-4">
                   <Button variant="outline" onClick={() => setStep(2)} className="flex-1">
-                    पीछे जाएं
+                    {isHindi ? "पीछे जाएं" : "Go Back"}
                   </Button>
                   <Button 
                     onClick={streamGuidance}
-                    disabled={!profile.problem || isLoading}
+                    disabled={!profile.problemCategory || !profile.problem || isLoading}
                     className="flex-1"
                   >
                     <Sparkles className="w-4 h-4 mr-2" />
-                    मार्गदर्शन प्राप्त करें
+                    {isHindi ? "भविष्यवाणी प्राप्त करें" : "Get Prediction"}
                   </Button>
                 </div>
+
+                <p className="text-xs text-muted-foreground text-center">
+                  {isHindi 
+                    ? "आपकी जानकारी पूर्णतः गोपनीय रखी जाएगी।"
+                    : "Your information will be kept completely confidential."
+                  }
+                </p>
               </div>
             </Card>
           )}
 
-          {/* Step 4: Guidance */}
+          {/* Step 4: Prediction Result */}
           {step === 4 && (
             <Card className="p-6 md:p-8 animate-fade-in">
               <div className="flex items-center gap-3 mb-6">
-                {selectedDeity && (
-                  <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center text-3xl">
-                    {selectedDeity.emoji}
-                  </div>
-                )}
+                <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center text-3xl">
+                  🪐
+                </div>
                 <div>
                   <h2 className="font-heading text-2xl font-semibold text-foreground flex items-center gap-2">
                     <MessageCircle className="w-6 h-6 text-primary" />
-                    {selectedDeity?.name} का संदेश
+                    {isHindi ? "ज्योतिष भविष्यवाणी" : "Astrology Prediction"}
                   </h2>
                   <p className="text-sm text-muted-foreground">
-                    {profile.name} के लिए दिव्य मार्गदर्शन
+                    {profile.name} • {selectedRashi?.symbol} {isHindi ? selectedRashi?.sanskrit : profile.rashi} • {isHindi ? selectedCategory?.labelHi : selectedCategory?.labelEn}
                   </p>
                 </div>
               </div>
@@ -371,14 +507,14 @@ const Guidance = () => {
                 <div className="flex flex-col items-center justify-center py-12">
                   <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
                   <p className="text-muted-foreground text-center">
-                    {selectedDeity?.name} आपकी पुकार सुन रहे हैं...
+                    {isHindi ? "आपकी कुंडली का विश्लेषण हो रहा है..." : "Analyzing your birth chart..."}
                   </p>
                 </div>
               )}
 
               {guidance && (
                 <div className="prose prose-lg max-w-none dark:prose-invert">
-                  <div className="whitespace-pre-line text-foreground/90 leading-relaxed text-lg">
+                  <div className="whitespace-pre-line text-foreground/90 leading-relaxed">
                     {guidance}
                   </div>
                   {isLoading && (
@@ -388,30 +524,61 @@ const Guidance = () => {
               )}
 
               {!isLoading && guidance && (
-                <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                  <Button 
-                    variant="outline" 
-                    onClick={() => {
-                      setStep(1);
-                      setGuidance("");
-                      setProfile({
-                        name: "",
-                        devotedDeity: "",
-                        dateOfBirth: "",
-                        rashi: "",
-                        problem: ""
-                      });
-                    }}
-                    className="flex-1"
-                  >
-                    नया सत्र शुरू करें
-                  </Button>
-                  <Button 
-                    onClick={() => navigate(`/deity/${profile.devotedDeity}`)}
-                    className="flex-1"
-                  >
-                    {selectedDeity?.name} की कथा पढ़ें
-                  </Button>
+                <div className="mt-8 space-y-4">
+                  {/* Follow-up Options */}
+                  <div className="p-4 bg-muted/50 rounded-lg">
+                    <p className="font-semibold text-foreground mb-3">
+                      {isHindi ? "और जानना चाहते हैं?" : "Want to know more?"}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => {
+                          setProfile(prev => ({ ...prev, problemCategory: "marriage", problem: isHindi ? "मेरी शादी कब होगी? विवाह योग कब बनेगा?" : "When will I get married? When is the marriage yoga?" }));
+                          setStep(3);
+                        }}
+                      >
+                        {isHindi ? "💍 विवाह समय" : "💍 Marriage Timing"}
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => {
+                          setProfile(prev => ({ ...prev, problemCategory: "career", problem: isHindi ? "अगले साल करियर में क्या होगा? नौकरी/प्रमोशन?" : "What about career next year? Job/Promotion?" }));
+                          setStep(3);
+                        }}
+                      >
+                        {isHindi ? "💼 करियर मार्गदर्शन" : "💼 Career Guidance"}
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => {
+                          setProfile(prev => ({ ...prev, problemCategory: "finance", problem: isHindi ? "धन और आर्थिक स्थिति कैसी रहेगी?" : "How will be my financial situation?" }));
+                          setStep(3);
+                        }}
+                      >
+                        {isHindi ? "💰 धन योग" : "💰 Wealth Forecast"}
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Button 
+                      variant="outline" 
+                      onClick={resetForm}
+                      className="flex-1"
+                    >
+                      {isHindi ? "नया सत्र शुरू करें" : "Start New Session"}
+                    </Button>
+                    <Button 
+                      onClick={() => navigate("/")}
+                      className="flex-1"
+                    >
+                      {isHindi ? "होम पेज पर जाएं" : "Go to Home"}
+                    </Button>
+                  </div>
                 </div>
               )}
             </Card>
