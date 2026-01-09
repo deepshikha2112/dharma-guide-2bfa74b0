@@ -9,6 +9,8 @@ import Guidance from "./pages/Guidance";
 import Compatibility from "./pages/Compatibility";
 import Meditation from "./pages/Meditation";
 import Ramcharitmanas from "./pages/Ramcharitmanas";
+import BhagavadGita from "./pages/BhagavadGita";
+import VishnuPuran from "./pages/VishnuPuran";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +28,8 @@ const App = () => (
           <Route path="/compatibility" element={<Compatibility />} />
           <Route path="/meditation" element={<Meditation />} />
           <Route path="/ramcharitmanas" element={<Ramcharitmanas />} />
+          <Route path="/bhagavad-gita" element={<BhagavadGita />} />
+          <Route path="/vishnu-puran" element={<VishnuPuran />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
