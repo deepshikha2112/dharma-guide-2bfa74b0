@@ -1,10 +1,12 @@
+import { MoodType, InstrumentType } from '@/hooks/useDivineAudio';
+
 export interface VishnuPuranChapter {
   id: string;
   title: string;
   titleHindi: string;
   content: string;
-  mood: 'peaceful' | 'devotional' | 'mystical' | 'heroic';
-  instrument: 'flute' | 'sitar' | 'tabla' | 'harmonium' | 'bells' | 'conch';
+  mood: MoodType;
+  instrument: InstrumentType;
 }
 
 export const vishnuPuranChapters: VishnuPuranChapter[] = [
@@ -24,7 +26,7 @@ export const vishnuPuranChapters: VishnuPuranChapter[] = [
 
 भगवान विष्णु धर्म की रक्षा और अधर्म के नाश के लिए युगानुसार अवतार लेते हैं। उनके दस प्रमुख अवतार हैं जिन्हें दशावतार कहा जाता है।`,
     mood: "devotional",
-    instrument: "conch"
+    instrument: "bells"
   },
   {
     id: "vishnu-2",
@@ -41,8 +43,8 @@ export const vishnuPuranChapters: VishnuPuranChapter[] = [
 तब भगवान ने अपना वास्तविक स्वरूप प्रकट किया और कहा - "हे राजन! सात दिन बाद प्रलय आएगी। तुम सप्तऋषियों, औषधियों के बीजों और प्राणियों के जोड़ों को एक नाव में लेकर तैयार रहना।"
 
 प्रलय के समय भगवान मत्स्य ने अपने सींग से उस नाव को बांधकर सुरक्षित स्थान पर पहुंचाया। इस प्रकार उन्होंने सृष्टि की रक्षा की और वेदों को हयग्रीव दैत्य से पुनः प्राप्त किया।`,
-    mood: "heroic",
-    instrument: "conch"
+    mood: "powerful",
+    instrument: "bells"
   },
   {
     id: "vishnu-3",
@@ -61,7 +63,7 @@ export const vishnuPuranChapters: VishnuPuranChapter[] = [
 समुद्र मंथन से चौदह रत्न निकले - हलाहल विष, कामधेनु, उच्चैश्रवा अश्व, ऐरावत हाथी, कौस्तुभ मणि, कल्पवृक्ष, अप्सराएं, लक्ष्मी जी, वारुणी, चंद्रमा, पारिजात वृक्ष, शंख, धन्वंतरि और अमृत।
 
 भगवान विष्णु ने मोहिनी रूप धारण कर अमृत देवताओं को पिलाया और उन्हें पुनः शक्तिशाली बनाया।`,
-    mood: "mystical",
+    mood: "divine",
     instrument: "bells"
   },
   {
@@ -81,8 +83,8 @@ export const vishnuPuranChapters: VishnuPuranChapter[] = [
 पृथ्वी ने भगवान की स्तुति की - "हे प्रभो! आपने मुझे रसातल से उबारा। आप समस्त जगत के रक्षक हैं।"
 
 भगवान ने पृथ्वी को आशीर्वाद दिया और वैकुंठ लौट गए।`,
-    mood: "heroic",
-    instrument: "conch"
+    mood: "powerful",
+    instrument: "bells"
   },
   {
     id: "vishnu-5",
@@ -105,8 +107,8 @@ export const vishnuPuranChapters: VishnuPuranChapter[] = [
 संध्या के समय (न दिन न रात), देहलीज पर (न घर में न बाहर), अपने नखों से (न अस्त्र न शस्त्र), अपनी गोद में रखकर (न भूमि पर न आकाश में), नर-सिंह रूप में (न मनुष्य न पशु) भगवान ने हिरण्यकशिपु का वध किया।
 
 भक्त प्रह्लाद ने भगवान की स्तुति की और भगवान ने उन्हें आशीर्वाद दिया।`,
-    mood: "heroic",
-    instrument: "tabla"
+    mood: "powerful",
+    instrument: "percussion"
   },
   {
     id: "vishnu-6",
@@ -129,8 +131,8 @@ export const vishnuPuranChapters: VishnuPuranChapter[] = [
 भगवान ने बलि को पाताल का राज्य दिया और उनकी भक्ति से प्रसन्न होकर वरदान दिया कि वे सदा बलि के द्वारपाल रहेंगे।
 
 इस अवतार में भगवान ने देवताओं को स्वर्ग लौटाया और बलि की भक्ति की परीक्षा ली।`,
-    mood: "mystical",
-    instrument: "harmonium"
+    mood: "divine",
+    instrument: "tanpura"
   },
   {
     id: "vishnu-7",
@@ -149,8 +151,8 @@ export const vishnuPuranChapters: VishnuPuranChapter[] = [
 उन्होंने अपनी प्रतिज्ञा पूर्ण की और पृथ्वी का दान कश्यप ऋषि को कर दिया। स्वयं महेंद्र पर्वत पर तपस्या करने चले गए।
 
 परशुराम चिरंजीवी हैं और आज भी महेंद्र पर्वत पर तपस्या में लीन माने जाते हैं। वे कलियुग के अंत में कल्कि अवतार के गुरु बनेंगे।`,
-    mood: "heroic",
-    instrument: "tabla"
+    mood: "powerful",
+    instrument: "percussion"
   },
   {
     id: "vishnu-8",
@@ -172,7 +174,7 @@ export const vishnuPuranChapters: VishnuPuranChapter[] = [
 
 मर्यादा पुरुषोत्तम राम ने धर्म, सत्य और कर्तव्य का आदर्श प्रस्तुत किया।`,
     mood: "devotional",
-    instrument: "harmonium"
+    instrument: "tanpura"
   },
   {
     id: "vishnu-9",
@@ -235,8 +237,8 @@ export const vishnuPuranChapters: VishnuPuranChapter[] = [
 यह अवतार भविष्य में होना है और यह भगवान विष्णु के दशावतार में अंतिम और पूर्ण अवतार माना जाता है।
 
 ॥ इति श्री विष्णु महिमा ॥`,
-    mood: "mystical",
-    instrument: "conch"
+    mood: "divine",
+    instrument: "bells"
   },
   {
     id: "vishnu-12",
@@ -265,7 +267,7 @@ export const vishnuPuranChapters: VishnuPuranChapter[] = [
 
 इस स्तोत्र के पाठ से समस्त पाप नष्ट होते हैं, मनोकामनाएं पूर्ण होती हैं और मोक्ष की प्राप्ति होती है।`,
     mood: "devotional",
-    instrument: "harmonium"
+    instrument: "tanpura"
   }
 ];
 
