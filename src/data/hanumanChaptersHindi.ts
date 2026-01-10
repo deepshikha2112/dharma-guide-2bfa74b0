@@ -1,7 +1,7 @@
 import { MoodType, InstrumentType } from "@/hooks/useDivineAudio";
 
 export interface HanumanChapter {
-  id: number;
+  id: string;
   title: string;
   content: string;
   mood: MoodType;
@@ -10,7 +10,7 @@ export interface HanumanChapter {
 
 export const hanumanChaptersHindi: HanumanChapter[] = [
   {
-    id: 1,
+    id: "1",
     title: "अध्याय 1: हनुमान जी का दिव्य जन्म",
     content: `॥ जय श्री हनुमान ॥
 
@@ -41,7 +41,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "bells"
   },
   {
-    id: 2,
+    id: "2",
     title: "अध्याय 2: बाल हनुमान और सूर्य की ओर उड़ान",
     content: `॥ बाल हनुमान की अद्भुत लीला ॥
 
@@ -74,7 +74,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "percussion"
   },
   {
-    id: 3,
+    id: "3",
     title: "अध्याय 3: ऋषियों का वरदान और शक्ति का गुप्त होना",
     content: `॥ दिव्य वरदानों की वर्षा ॥
 
@@ -113,7 +113,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "tanpura"
   },
   {
-    id: 4,
+    id: "4",
     title: "अध्याय 4: शिक्षा, ब्रह्मचर्य और विनम्रता",
     content: `॥ गुरु भक्ति और ज्ञान अर्जन ॥
 
@@ -152,7 +152,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "tanpura"
   },
   {
-    id: 5,
+    id: "5",
     title: "अध्याय 5: किष्किंधा में सुग्रीव से भेंट",
     content: `॥ मित्रता का पावन बंधन ॥
 
@@ -185,7 +185,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "flute"
   },
   {
-    id: 6,
+    id: "6",
     title: "अध्याय 6: प्रभु श्रीराम से प्रथम मिलन",
     content: `॥ जीवन का सबसे पावन क्षण ॥
 
@@ -224,7 +224,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "bells"
   },
   {
-    id: 7,
+    id: "7",
     title: "अध्याय 7: हनुमान जी का राम भक्त बनना",
     content: `॥ पूर्ण समर्पण की गाथा ॥
 
@@ -261,7 +261,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "tanpura"
   },
   {
-    id: 8,
+    id: "8",
     title: "अध्याय 8: माता सीता की खोज का आरंभ",
     content: `॥ महान खोज की शुरुआत ॥
 
@@ -298,7 +298,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "flute"
   },
   {
-    id: 9,
+    id: "9",
     title: "अध्याय 9: समुद्र लांघने का साहस",
     content: `॥ असंभव को संभव बनाना ॥
 
@@ -341,7 +341,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "percussion"
   },
   {
-    id: 10,
+    id: "10",
     title: "अध्याय 10: लंका का दिव्य और भयावह दृश्य",
     content: `॥ स्वर्ण नगरी में प्रवेश ॥
 
@@ -378,7 +378,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "bells"
   },
   {
-    id: 11,
+    id: "11",
     title: "अध्याय 11: अशोक वाटिका में माता सीता से भेंट",
     content: `॥ सबसे पावन मिलन ॥
 
@@ -423,7 +423,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "flute"
   },
   {
-    id: 12,
+    id: "12",
     title: "अध्याय 12: लंका में हनुमान लीला",
     content: `॥ वीरता और पराक्रम ॥
 
@@ -468,7 +468,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "percussion"
   },
   {
-    id: 13,
+    id: "13",
     title: "अध्याय 13: रावण सभा में निर्भीक संवाद",
     content: `॥ धर्म का उद्घोष ॥
 
@@ -513,7 +513,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "percussion"
   },
   {
-    id: 14,
+    id: "14",
     title: "अध्याय 14: लंका दहन",
     content: `॥ अधर्म का दंड ॥
 
@@ -556,7 +556,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "percussion"
   },
   {
-    id: 15,
+    id: "15",
     title: "अध्याय 15: प्रभु श्रीराम के पास वापसी",
     content: `॥ विजय का शुभ समाचार ॥
 
@@ -599,7 +599,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "bells"
   },
   {
-    id: 16,
+    id: "16",
     title: "अध्याय 16: युद्ध की तैयारी",
     content: `॥ महासंग्राम की भूमिका ॥
 
@@ -644,7 +644,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "percussion"
   },
   {
-    id: 17,
+    id: "17",
     title: "अध्याय 17: लंका युद्ध में हनुमान जी",
     content: `॥ महासंग्राम में वीरता ॥
 
@@ -689,7 +689,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "percussion"
   },
   {
-    id: 18,
+    id: "18",
     title: "अध्याय 18: संजीवनी पर्वत लाना",
     content: `॥ सर्वोच्च भक्ति का प्रमाण ॥
 
@@ -736,7 +736,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "flute"
   },
   {
-    id: 19,
+    id: "19",
     title: "अध्याय 19: अधर्म पर धर्म की विजय",
     content: `॥ रावण वध और विजय ॥
 
@@ -781,7 +781,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "bells"
   },
   {
-    id: 20,
+    id: "20",
     title: "अध्याय 20: राम राज्य में हनुमान जी",
     content: `॥ सेवा का अमर उदाहरण ॥
 
@@ -822,7 +822,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "tanpura"
   },
   {
-    id: 21,
+    id: "21",
     title: "अध्याय 21: चिरंजीवी हनुमान",
     content: `॥ अमरता का वरदान ॥
 
@@ -867,7 +867,7 @@ export const hanumanChaptersHindi: HanumanChapter[] = [
     instrument: "om"
   },
   {
-    id: 22,
+    id: "22",
     title: "अध्याय 22: हनुमान जी से मिलने वाली शिक्षाएँ",
     content: `॥ जीवन की सर्वोच्च शिक्षाएँ ॥
 
