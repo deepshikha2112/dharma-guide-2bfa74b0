@@ -4,11 +4,17 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BookOpen, Play, Pause, Square, Volume2, VolumeX, ChevronDown, ChevronUp, Headphones, BookOpenText, Loader2, Languages } from 'lucide-react';
+import { 
+  BookOpen, Play, Pause, Square, Volume2, VolumeX, 
+  Headphones, BookOpenText, Loader2, Languages,
+  ChevronLeft, ChevronRight, Home
+} from 'lucide-react';
 import { useDivineAudio, MoodType, InstrumentType } from '@/hooks/useDivineAudio';
+export type { MoodType, InstrumentType } from '@/hooks/useDivineAudio';
 import { useElevenLabsTTS } from '@/hooks/useElevenLabsTTS';
+import { motion, AnimatePresence } from 'framer-motion';
 
-interface Chapter {
+export interface Chapter {
   id: string;
   title: string;
   titleEnglish?: string;
@@ -29,13 +35,16 @@ const ChapterAudioReader = ({ chapters, deityName }: ChapterAudioReaderProps) =>
   const { play, stop, setVolume, isPlaying } = useDivineAudio();
   const narration = useElevenLabsTTS();
   
-  const [expandedChapter, setExpandedChapter] = useState<string | null>(chapters[0]?.id || null);
+  const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const [playingChapter, setPlayingChapter] = useState<string | null>(null);
   const [listeningChapter, setListeningChapter] = useState<string | null>(null);
   const [mode, setMode] = useState<'read' | 'listen'>('read');
   const [volume, setVolumeState] = useState(0.35);
   const [isMuted, setIsMuted] = useState(false);
   const [language, setLanguage] = useState<'hindi' | 'english'>('hindi');
+  const [showChapterList, setShowChapterList] = useState(false);
+
+  const currentChapter = chapters[currentChapterIndex];
 
   useEffect(() => {
     return () => {
@@ -47,24 +56,41 @@ const ChapterAudioReader = ({ chapters, deityName }: ChapterAudioReaderProps) =>
 
   // Stop narration when chapter changes
   useEffect(() => {
-    if (listeningChapter && expandedChapter !== listeningChapter) {
+    if (listeningChapter && currentChapter?.id !== listeningChapter) {
       narration.stopNarration();
       setListeningChapter(null);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [expandedChapter, listeningChapter]);
+  }, [currentChapterIndex, listeningChapter]);
 
-  const toggleExpand = (chapterId: string) => {
-    setExpandedChapter(expandedChapter === chapterId ? null : chapterId);
+  const goToChapter = (index: number) => {
+    if (index >= 0 && index < chapters.length) {
+      // Stop current audio
+      if (listeningChapter) {
+        narration.stopNarration();
+        setListeningChapter(null);
+      }
+      if (playingChapter) {
+        stop();
+        setPlayingChapter(null);
+      }
+      setCurrentChapterIndex(index);
+      setShowChapterList(false);
+    }
   };
 
-  const toggleBackgroundMusic = (chapter: Chapter) => {
-    if (playingChapter === chapter.id) {
+  const goToNextChapter = () => goToChapter(currentChapterIndex + 1);
+  const goToPreviousChapter = () => goToChapter(currentChapterIndex - 1);
+
+  const toggleBackgroundMusic = () => {
+    if (!currentChapter) return;
+    
+    if (playingChapter === currentChapter.id) {
       stop();
       setPlayingChapter(null);
     } else {
-      play({ mood: chapter.mood, volume: isMuted ? 0 : volume });
-      setPlayingChapter(chapter.id);
+      play({ mood: currentChapter.mood, volume: isMuted ? 0 : volume });
+      setPlayingChapter(currentChapter.id);
     }
   };
 
@@ -89,24 +115,24 @@ const ChapterAudioReader = ({ chapters, deityName }: ChapterAudioReaderProps) =>
     return chapter.subtitle;
   };
 
-  const startListening = (chapter: Chapter) => {
+  const startListening = () => {
+    if (!currentChapter) return;
+    
     // Start background music
-    if (playingChapter !== chapter.id) {
-      play({ mood: chapter.mood, volume: isMuted ? 0 : volume * 0.3 }); // Lower volume for narration
-      setPlayingChapter(chapter.id);
+    if (playingChapter !== currentChapter.id) {
+      play({ mood: currentChapter.mood, volume: isMuted ? 0 : volume * 0.3 });
+      setPlayingChapter(currentChapter.id);
     } else {
-      setVolume(volume * 0.3); // Lower existing music
+      setVolume(volume * 0.3);
     }
     
-    // Start narration with ElevenLabs using current language content
-    narration.startNarration(getChapterContent(chapter));
-    setListeningChapter(chapter.id);
+    narration.startNarration(getChapterContent(currentChapter));
+    setListeningChapter(currentChapter.id);
   };
 
   const stopListening = () => {
     narration.stopNarration();
     setListeningChapter(null);
-    // Restore music volume
     if (playingChapter) {
       setVolume(isMuted ? 0 : volume);
     }
@@ -136,7 +162,6 @@ const ChapterAudioReader = ({ chapters, deityName }: ChapterAudioReaderProps) =>
   };
 
   const toggleLanguage = () => {
-    // Stop narration when changing language
     if (listeningChapter) {
       narration.stopNarration();
       setListeningChapter(null);
@@ -171,258 +196,335 @@ const ChapterAudioReader = ({ chapters, deityName }: ChapterAudioReaderProps) =>
     );
   }
 
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between flex-wrap gap-2">
-        <h3 className="font-heading text-xl font-semibold text-foreground flex items-center gap-2">
-          <BookOpen className="w-5 h-5 text-primary" />
-          {language === 'hindi' ? 'दिव्य जीवन कथा' : 'Divine Life Story'}
-        </h3>
-        <div className="flex items-center gap-2">
-          {/* Language Toggle */}
+  if (!currentChapter) return null;
+
+  // Chapter List View
+  if (showChapterList) {
+    return (
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="space-y-4"
+      >
+        <div className="flex items-center justify-between">
+          <h3 className="font-heading text-xl font-semibold text-foreground flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-primary" />
+            {language === 'hindi' ? 'अध्याय सूची' : 'Chapter List'}
+          </h3>
           <Button
             variant="outline"
             size="sm"
             onClick={toggleLanguage}
-            className="gap-1.5 text-xs px-3 h-9 bg-gradient-to-r from-cosmic-gold/20 to-cosmic-gold/10 border-cosmic-gold/30 hover:border-cosmic-gold/50 transition-all duration-300"
+            className="gap-1.5 text-xs px-3 h-9 bg-gradient-to-r from-cosmic-gold/20 to-cosmic-gold/10 border-cosmic-gold/30"
           >
             <Languages className="w-3.5 h-3.5" />
             {language === 'hindi' ? '🇮🇳 हिंदी' : '🇬🇧 English'}
           </Button>
-          
-          <Tabs value={mode} onValueChange={(v) => setMode(v as 'read' | 'listen')} className="w-auto">
-            <TabsList className="h-9">
-              <TabsTrigger value="read" className="gap-1.5 text-xs px-3">
-                <BookOpenText className="w-3.5 h-3.5" />
-                {language === 'hindi' ? 'पढ़ें' : 'Read'}
-              </TabsTrigger>
-              <TabsTrigger value="listen" className="gap-1.5 text-xs px-3">
-                <Headphones className="w-3.5 h-3.5" />
-                {language === 'hindi' ? 'सुनें' : 'Listen'}
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
         </div>
-      </div>
 
-      <div className="space-y-3">
-        {chapters.map((chapter, index) => (
-          <Card key={chapter.id} className="overflow-hidden bg-gradient-to-br from-background/80 to-background/40 backdrop-blur-sm border-cosmic-gold/20">
-            <button
-              onClick={() => toggleExpand(chapter.id)}
-              className="w-full p-4 flex items-center justify-between hover:bg-cosmic-gold/5 transition-colors"
+        <div className="grid gap-3">
+          {chapters.map((chapter, index) => (
+            <Card 
+              key={chapter.id}
+              onClick={() => goToChapter(index)}
+              className="p-4 cursor-pointer hover:bg-cosmic-gold/10 transition-all duration-300 border-cosmic-gold/20 hover:border-cosmic-gold/40"
             >
-              <div className="text-left">
-                <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-cosmic-gold/20 text-cosmic-gold font-medium border border-cosmic-gold/30">
-                    {language === 'hindi' ? `अध्याय ${index + 1}` : `Chapter ${index + 1}`}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {getMoodLabel(chapter.mood)}
-                  </span>
-                  {playingChapter === chapter.id && (
-                    <span className="flex items-center gap-1 text-xs text-green-600 dark:text-green-400">
-                      <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                      {language === 'hindi' ? 'संगीत' : 'Music'}
-                    </span>
-                  )}
-                  {listeningChapter === chapter.id && (
-                    <span className="flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400">
-                      <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-                      {language === 'hindi' ? 'वाचन' : 'Narrating'}
-                    </span>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-cosmic-gold/30 to-primary/30 flex items-center justify-center text-lg font-heading font-bold text-cosmic-gold">
+                  {index + 1}
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-heading font-semibold text-foreground">
+                    {getChapterTitle(chapter)}
+                  </h4>
+                  {getChapterSubtitle(chapter) && (
+                    <p className="text-sm text-muted-foreground">{getChapterSubtitle(chapter)}</p>
                   )}
                 </div>
-                <h4 className="font-heading font-semibold text-foreground">
-                  {getChapterTitle(chapter)}
-                </h4>
-                {getChapterSubtitle(chapter) && (
-                  <p className="text-sm text-muted-foreground">{getChapterSubtitle(chapter)}</p>
-                )}
+                <ChevronRight className="w-5 h-5 text-muted-foreground" />
               </div>
-              {expandedChapter === chapter.id ? (
-                <ChevronUp className="w-5 h-5 text-muted-foreground flex-shrink-0" />
-              ) : (
-                <ChevronDown className="w-5 h-5 text-muted-foreground flex-shrink-0" />
-              )}
-            </button>
+            </Card>
+          ))}
+        </div>
+      </motion.div>
+    );
+  }
 
-            {expandedChapter === chapter.id && (
-              <div className="px-4 pb-4 animate-fade-in">
-                {/* Mode-specific Controls */}
-                {mode === 'read' ? (
-                  /* Read Mode - Background Music Only */
-                  <div className="mb-4 p-3 bg-cosmic-gold/5 rounded-lg border border-cosmic-gold/20">
-                    <div className="flex items-center justify-between flex-wrap gap-2">
-                      <div className="flex items-center gap-3">
+  // Single Chapter Book View
+  return (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={currentChapter.id}
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -20 }}
+        transition={{ duration: 0.3 }}
+        className="space-y-4"
+      >
+        {/* Top Header Bar */}
+        <div className="flex items-center justify-between flex-wrap gap-2 pb-2 border-b border-cosmic-gold/20">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowChapterList(true)}
+            className="gap-1.5 text-xs hover:bg-cosmic-gold/10"
+          >
+            <Home className="w-4 h-4" />
+            {language === 'hindi' ? 'सभी अध्याय' : 'All Chapters'}
+          </Button>
+
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={toggleLanguage}
+              className="gap-1.5 text-xs px-3 h-8 bg-gradient-to-r from-cosmic-gold/20 to-cosmic-gold/10 border-cosmic-gold/30"
+            >
+              <Languages className="w-3.5 h-3.5" />
+              {language === 'hindi' ? '🇮🇳 हिंदी' : '🇬🇧 English'}
+            </Button>
+            
+            <Tabs value={mode} onValueChange={(v) => setMode(v as 'read' | 'listen')} className="w-auto">
+              <TabsList className="h-8">
+                <TabsTrigger value="read" className="gap-1 text-xs px-2">
+                  <BookOpenText className="w-3 h-3" />
+                  {language === 'hindi' ? 'पढ़ें' : 'Read'}
+                </TabsTrigger>
+                <TabsTrigger value="listen" className="gap-1 text-xs px-2">
+                  <Headphones className="w-3 h-3" />
+                  {language === 'hindi' ? 'सुनें' : 'Listen'}
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+        </div>
+
+        {/* Chapter Title Section */}
+        <Card className="p-6 bg-gradient-to-br from-cosmic-gold/10 via-background/80 to-primary/5 border-cosmic-gold/30">
+          <div className="text-center space-y-3">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-cosmic-gold/20 text-cosmic-gold font-medium text-sm border border-cosmic-gold/30">
+              {language === 'hindi' ? `अध्याय ${currentChapterIndex + 1}` : `Chapter ${currentChapterIndex + 1}`}
+            </span>
+            
+            <h2 className="font-heading text-2xl md:text-3xl font-bold text-foreground leading-tight">
+              {getChapterTitle(currentChapter)}
+            </h2>
+            
+            {getChapterSubtitle(currentChapter) && (
+              <p className="text-muted-foreground text-lg">{getChapterSubtitle(currentChapter)}</p>
+            )}
+
+            {/* Decorative divider */}
+            <div className="flex items-center justify-center gap-3 pt-2">
+              <div className="w-16 h-px bg-gradient-to-r from-transparent to-cosmic-gold/50" />
+              <span className="text-cosmic-gold text-xl">✦</span>
+              <div className="w-16 h-px bg-gradient-to-l from-transparent to-cosmic-gold/50" />
+            </div>
+          </div>
+        </Card>
+
+        {/* Audio Controls */}
+        <Card className="p-4 border-cosmic-gold/20">
+          {mode === 'read' ? (
+            <div className="flex items-center justify-between flex-wrap gap-3">
+              <div className="flex items-center gap-3">
+                <Button
+                  size="icon"
+                  onClick={toggleBackgroundMusic}
+                  className="w-10 h-10 rounded-full bg-gradient-to-r from-cosmic-gold to-cosmic-gold/80 hover:from-cosmic-gold/90 hover:to-cosmic-gold/70 text-black"
+                >
+                  {playingChapter === currentChapter.id ? (
+                    <Pause className="w-4 h-4" />
+                  ) : (
+                    <Play className="w-4 h-4 ml-0.5" />
+                  )}
+                </Button>
+                <div>
+                  <p className="text-sm font-medium text-foreground">
+                    {playingChapter === currentChapter.id 
+                      ? (language === 'hindi' ? "🎵 संगीत चल रहा है" : "🎵 Playing music")
+                      : (language === 'hindi' ? "पृष्ठभूमि संगीत" : "Background music")}
+                  </p>
+                  <p className="text-xs text-muted-foreground">{getMoodLabel(currentChapter.mood)}</p>
+                </div>
+              </div>
+              
+              {playingChapter === currentChapter.id && (
+                <div className="flex items-center gap-2">
+                  <Button variant="ghost" size="icon" onClick={toggleMute} className="h-8 w-8">
+                    {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                  </Button>
+                  <Slider value={[volume]} onValueChange={handleVolumeChange} max={1} step={0.01} className="w-24" />
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between flex-wrap gap-3">
+                <div className="flex items-center gap-3">
+                  {listeningChapter === currentChapter.id ? (
+                    <>
+                      {narration.isLoading ? (
+                        <Button size="icon" disabled className="w-10 h-10 rounded-full bg-blue-600">
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        </Button>
+                      ) : (
                         <Button
                           size="icon"
-                          onClick={() => toggleBackgroundMusic(chapter)}
-                          className="w-10 h-10 rounded-full bg-gradient-to-r from-cosmic-gold to-cosmic-gold/80 hover:from-cosmic-gold/90 hover:to-cosmic-gold/70 text-black"
+                          onClick={toggleNarrationPause}
+                          className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700"
                         >
-                          {playingChapter === chapter.id ? (
-                            <Pause className="w-4 h-4" />
-                          ) : (
-                            <Play className="w-4 h-4 ml-0.5" />
-                          )}
+                          {narration.isPaused ? <Play className="w-4 h-4 ml-0.5" /> : <Pause className="w-4 h-4" />}
                         </Button>
-                        <div>
-                          <p className="text-sm font-medium text-foreground">
-                            {playingChapter === chapter.id 
-                              ? (language === 'hindi' ? "संगीत के साथ पढ़ रहे हैं..." : "Reading with music...")
-                              : (language === 'hindi' ? "पृष्ठभूमि संगीत चालू करें" : "Play ambient music")}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {getMoodLabel(chapter.mood)} {language === 'hindi' ? 'पृष्ठभूमि' : 'background'}
-                          </p>
-                        </div>
-                      </div>
-                      
-                      {playingChapter === chapter.id && (
-                        <div className="flex items-center gap-2">
-                          <Button variant="ghost" size="icon" onClick={toggleMute} className="h-8 w-8">
-                            {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                          </Button>
-                          <Slider
-                            value={[volume]}
-                            onValueChange={handleVolumeChange}
-                            max={1}
-                            step={0.01}
-                            className="w-20"
-                          />
-                        </div>
                       )}
-                    </div>
+                      <Button size="icon" variant="outline" onClick={stopListening} className="w-10 h-10 rounded-full">
+                        <Square className="w-4 h-4" />
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      size="icon"
+                      onClick={startListening}
+                      className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700"
+                    >
+                      <Headphones className="w-4 h-4" />
+                    </Button>
+                  )}
+                  <div>
+                    <p className="text-sm font-medium text-foreground">
+                      {listeningChapter === currentChapter.id 
+                        ? narration.isLoading
+                          ? (language === 'hindi' ? "ऑडियो लोड हो रहा है..." : "Loading...")
+                          : narration.isPaused 
+                            ? (language === 'hindi' ? "रुका हुआ" : "Paused")
+                            : (language === 'hindi' 
+                              ? `पैराग्राफ ${narration.currentParagraph + 1}/${narration.totalParagraphs}`
+                              : `Paragraph ${narration.currentParagraph + 1}/${narration.totalParagraphs}`)
+                        : (language === 'hindi' ? "अध्याय सुनें" : "Listen to chapter")}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {language === 'hindi' ? 'वॉइस नैरेशन + संगीत' : 'Voice narration + music'}
+                    </p>
                   </div>
-                ) : (
-                  /* Listen Mode - Narration + Background Music */
-                  <div className="mb-4 p-3 bg-blue-500/5 border border-blue-500/20 rounded-lg space-y-3">
-                    <div className="flex items-center justify-between flex-wrap gap-2">
-                      <div className="flex items-center gap-3">
-                        {listeningChapter === chapter.id ? (
-                          <>
-                            {narration.isLoading ? (
-                              <Button
-                                size="icon"
-                                disabled
-                                className="w-10 h-10 rounded-full bg-blue-600"
-                              >
-                                <Loader2 className="w-4 h-4 animate-spin" />
-                              </Button>
-                            ) : (
-                              <Button
-                                size="icon"
-                                onClick={toggleNarrationPause}
-                                className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700"
-                              >
-                                {narration.isPaused ? (
-                                  <Play className="w-4 h-4 ml-0.5" />
-                                ) : (
-                                  <Pause className="w-4 h-4" />
-                                )}
-                              </Button>
-                            )}
-                            <Button
-                              size="icon"
-                              variant="outline"
-                              onClick={stopListening}
-                              className="w-10 h-10 rounded-full"
-                            >
-                              <Square className="w-4 h-4" />
-                            </Button>
-                          </>
-                        ) : (
-                          <Button
-                            size="icon"
-                            onClick={() => startListening(chapter)}
-                            className="w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700"
-                          >
-                            <Headphones className="w-4 h-4" />
-                          </Button>
-                        )}
-                        <div>
-                          <p className="text-sm font-medium text-foreground">
-                            {listeningChapter === chapter.id 
-                              ? narration.isLoading
-                                ? (language === 'hindi' ? "ऑडियो लोड हो रहा है..." : "Loading audio...")
-                                : narration.isPaused 
-                                  ? (language === 'hindi' ? "रुका हुआ" : "Paused")
-                                  : (language === 'hindi' 
-                                    ? `पैराग्राफ ${narration.currentParagraph + 1} / ${narration.totalParagraphs} पढ़ रहे हैं...`
-                                    : `Narrating paragraph ${narration.currentParagraph + 1} of ${narration.totalParagraphs}...`)
-                              : (language === 'hindi' ? "यह अध्याय सुनें" : "Listen to this chapter")}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {language === 'hindi' 
-                              ? `${getMoodLabel(chapter.mood).toLowerCase()} संगीत के साथ कथा वाचन`
-                              : `Scripture narration with ${getMoodLabel(chapter.mood).toLowerCase()} music`}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Volume Controls */}
-                    {listeningChapter === chapter.id && (
-                      <div className="flex items-center justify-between gap-4 pt-2 border-t border-blue-500/10">
-                        {narration.isLoading && (
-                          <div className="flex items-center gap-2 text-blue-600">
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            <span className="text-xs">{language === 'hindi' ? 'ऑडियो तैयार हो रहा है...' : 'Generating audio...'}</span>
-                          </div>
-                        )}
-                        {narration.error && (
-                          <span className="text-xs text-red-500">{narration.error}</span>
-                        )}
-                        <div className="flex items-center gap-2 ml-auto">
-                          <span className="text-xs text-muted-foreground">{language === 'hindi' ? 'संगीत' : 'Music'}</span>
-                          <Button variant="ghost" size="icon" onClick={toggleMute} className="h-8 w-8">
-                            {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                          </Button>
-                          <Slider
-                            value={[volume]}
-                            onValueChange={handleVolumeChange}
-                            max={1}
-                            step={0.01}
-                            className="w-20"
-                          />
-                        </div>
-                      </div>
-                    )}
+                </div>
+
+                {listeningChapter === currentChapter.id && (
+                  <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="icon" onClick={toggleMute} className="h-8 w-8">
+                      {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                    </Button>
+                    <Slider value={[volume]} onValueChange={handleVolumeChange} max={1} step={0.01} className="w-20" />
                   </div>
                 )}
-
-                {/* Chapter Content */}
-                <ScrollArea className="max-h-[70vh]">
-                  <div className="p-4 bg-gradient-to-br from-cosmic-gold/5 to-transparent rounded-lg border border-cosmic-gold/10">
-                    <div className="prose prose-sm dark:prose-invert max-w-none">
-                      {getChapterContent(chapter).split('\n\n').map((paragraph, i) => (
-                        <p 
-                          key={i} 
-                          className={`text-foreground leading-relaxed mb-6 last:mb-0 text-base transition-colors ${
-                            listeningChapter === chapter.id && narration.currentParagraph === i
-                              ? 'bg-blue-500/10 -mx-2 px-2 py-2 rounded border-l-2 border-blue-500'
-                              : ''
-                          } ${language === 'hindi' ? 'font-hindi' : ''}`}
-                          style={{ 
-                            lineHeight: '1.8',
-                            letterSpacing: language === 'hindi' ? '0.02em' : 'normal'
-                          }}
-                        >
-                          {paragraph}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                </ScrollArea>
               </div>
-            )}
-          </Card>
-        ))}
-      </div>
-    </div>
-  );
-}
-export default ChapterAudioReader;
 
-export type { Chapter };
-export type { MoodType, InstrumentType } from '@/hooks/useDivineAudio';
+              {narration.error && (
+                <p className="text-xs text-red-500">{narration.error}</p>
+              )}
+            </div>
+          )}
+        </Card>
+
+        {/* Chapter Content */}
+        <Card className="border-cosmic-gold/20 overflow-hidden">
+          <ScrollArea className="h-[60vh] md:h-[65vh]">
+            <div className="p-6 md:p-8 space-y-6">
+              {/* Chapter text with proper paragraph spacing */}
+              <div className={`prose prose-lg dark:prose-invert max-w-none ${language === 'hindi' ? 'font-hindi' : ''}`}>
+                {getChapterContent(currentChapter).split('\n\n').map((paragraph, i) => (
+                  <p 
+                    key={i} 
+                    className={`text-foreground/90 leading-relaxed mb-6 text-base md:text-lg ${
+                      listeningChapter === currentChapter.id && narration.currentParagraph === i
+                        ? 'bg-primary/10 -mx-2 px-2 py-1 rounded-lg border-l-4 border-primary'
+                        : ''
+                    }`}
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+
+              {/* Chapter End Marker */}
+              <div className="pt-8 pb-4">
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <div className="w-16 h-px bg-gradient-to-r from-transparent via-cosmic-gold/50 to-transparent" />
+                  <span className="text-cosmic-gold text-2xl tracking-widest">❖ ❖ ❖</span>
+                  <div className="w-16 h-px bg-gradient-to-r from-transparent via-cosmic-gold/50 to-transparent" />
+                </div>
+                
+                <p className="text-center text-muted-foreground text-sm font-medium">
+                  {language === 'hindi' 
+                    ? '— इस अध्याय का समापन —' 
+                    : '— End of This Chapter —'}
+                </p>
+              </div>
+
+              {/* Navigation Buttons */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6 pb-4">
+                {currentChapterIndex > 0 && (
+                  <Button
+                    variant="outline"
+                    onClick={goToPreviousChapter}
+                    className="w-full sm:w-auto gap-2 border-cosmic-gold/30 hover:bg-cosmic-gold/10"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    {language === 'hindi' ? 'पिछला अध्याय' : 'Previous Chapter'}
+                  </Button>
+                )}
+
+                {currentChapterIndex < chapters.length - 1 && (
+                  <Button
+                    onClick={goToNextChapter}
+                    className="w-full sm:w-auto gap-2 bg-gradient-to-r from-cosmic-gold to-cosmic-gold/80 text-black font-semibold hover:from-cosmic-gold/90 hover:to-cosmic-gold/70 shadow-lg"
+                  >
+                    {language === 'hindi' ? 'अगला अध्याय' : 'Next Chapter'}
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
+                )}
+
+                {currentChapterIndex === chapters.length - 1 && (
+                  <div className="text-center">
+                    <p className="text-muted-foreground text-sm mb-3">
+                      {language === 'hindi' 
+                        ? '🙏 आपने सभी अध्याय पूरे किए' 
+                        : '🙏 You have completed all chapters'}
+                    </p>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowChapterList(true)}
+                      className="gap-2 border-cosmic-gold/30"
+                    >
+                      <Home className="w-4 h-4" />
+                      {language === 'hindi' ? 'अध्याय सूची देखें' : 'View All Chapters'}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </ScrollArea>
+        </Card>
+
+        {/* Bottom Chapter Progress */}
+        <div className="flex items-center justify-center gap-2 pt-2">
+          {chapters.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToChapter(index)}
+              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                index === currentChapterIndex 
+                  ? 'bg-cosmic-gold w-6' 
+                  : index < currentChapterIndex
+                    ? 'bg-cosmic-gold/50'
+                    : 'bg-muted-foreground/30'
+              }`}
+              aria-label={`Go to chapter ${index + 1}`}
+            />
+          ))}
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  );
+};
+
+export default ChapterAudioReader;
