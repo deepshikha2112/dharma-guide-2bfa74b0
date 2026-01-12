@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import DeitiesSection from "@/components/DeitiesSection";
 import MeditationPreview from "@/components/MeditationPreview";
-import MantraSection from "@/components/MantraSection";
+import TodaySacredMantra from "@/components/TodaySacredMantra";
 import CategoriesSection from "@/components/CategoriesSection";
 import Footer from "@/components/Footer";
 import CosmicBackground from "@/components/CosmicBackground";
@@ -16,7 +16,7 @@ const Index = () => {
       <HeroSection />
       <DeitiesSection />
       <MeditationPreview />
-      <MantraSection />
+      <TodaySacredMantra />
       <CategoriesSection />
       <Footer />
       <BottomNavigation />
