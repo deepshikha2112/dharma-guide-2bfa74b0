@@ -29,15 +29,15 @@ const Header = () => {
       transition={{ duration: 0.5 }}
       className="fixed top-0 left-0 right-0 z-50"
       style={{
-        background: "rgba(20, 10, 40, 0.8)",
+        background: "rgba(255, 250, 245, 0.9)",
         backdropFilter: "blur(20px)",
-        borderBottom: "1px solid rgba(180, 140, 255, 0.15)",
+        borderBottom: "1px solid hsl(35 40% 85% / 0.6)",
       }}
     >
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link to="/home" className="flex items-center gap-3">
-          <span className="text-2xl">✨</span>
-          <span className="font-heading text-xl font-semibold text-cosmic-pearl">
+          <span className="text-2xl">🙏</span>
+          <span className="font-heading text-xl font-semibold text-foreground">
             Divya Darshan
           </span>
         </Link>
@@ -50,8 +50,8 @@ const Header = () => {
               to={link.href} 
               className={`transition-colors font-body text-sm ${
                 isActive(link.href) 
-                  ? "text-cosmic-gold font-medium" 
-                  : "text-cosmic-pearl/70 hover:text-cosmic-pearl"
+                  ? "text-primary font-medium" 
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {link.label}
@@ -65,7 +65,7 @@ const Header = () => {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="divine-button px-5 py-2 rounded-full text-cosmic-pearl text-sm font-medium"
+              className="divine-button px-5 py-2 rounded-full text-white text-sm font-medium"
             >
               🧘 Meditate
             </motion.button>
@@ -75,23 +75,22 @@ const Header = () => {
         {/* Mobile Menu */}
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild className="md:hidden">
-            <button className="w-10 h-10 flex items-center justify-center rounded-full glass-card">
-              <Menu className="w-5 h-5 text-cosmic-pearl" />
+            <button className="w-10 h-10 flex items-center justify-center rounded-full bg-muted">
+              <Menu className="w-5 h-5 text-foreground" />
             </button>
           </SheetTrigger>
           <SheetContent 
             side="right" 
-            className="w-72 border-l-0"
+            className="w-72 border-l border-border"
             style={{
-              background: "rgba(20, 10, 40, 0.95)",
-              backdropFilter: "blur(20px)",
+              background: "hsl(35 40% 98%)",
             }}
           >
             <div className="flex flex-col h-full py-6">
               <div className="flex items-center mb-8">
                 <Link to="/home" onClick={() => setIsOpen(false)} className="flex items-center gap-2">
-                  <span className="text-xl">✨</span>
-                  <span className="font-heading font-semibold text-cosmic-pearl">
+                  <span className="text-xl">🙏</span>
+                  <span className="font-heading font-semibold text-foreground">
                     Divya Darshan
                   </span>
                 </Link>
@@ -105,8 +104,8 @@ const Header = () => {
                     onClick={() => setIsOpen(false)}
                     className={`py-3 px-4 rounded-xl transition-all ${
                       isActive(link.href)
-                        ? "glass-card-glow text-cosmic-gold"
-                        : "text-cosmic-pearl/70 hover:text-cosmic-pearl hover:bg-white/5"
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
                     }`}
                   >
                     {link.label}
@@ -116,7 +115,7 @@ const Header = () => {
 
               <div className="mt-auto">
                 <Link to="/meditation" onClick={() => setIsOpen(false)}>
-                  <button className="w-full divine-button py-3 rounded-full text-cosmic-pearl font-medium">
+                  <button className="w-full divine-button py-3 rounded-full text-white font-medium">
                     🧘 Start Meditation
                   </button>
                 </Link>

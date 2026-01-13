@@ -1,40 +1,36 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Mic } from "lucide-react";
-import GlowingOrb from "./GlowingOrb";
 
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Cosmic Background Gradient */}
+      {/* Light Temple Background Gradient */}
       <div 
         className="absolute inset-0"
         style={{
-          background: `
-            radial-gradient(ellipse at 50% 0%, rgba(180, 140, 255, 0.15) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 20%, rgba(100, 80, 200, 0.1) 0%, transparent 40%),
-            radial-gradient(ellipse at 20% 80%, rgba(255, 200, 100, 0.08) 0%, transparent 40%),
-            linear-gradient(180deg, hsl(260 40% 8%) 0%, hsl(270 35% 6%) 50%, hsl(260 40% 5%) 100%)
-          `,
+          background: "linear-gradient(180deg, hsl(40 60% 97%) 0%, hsl(35 50% 94%) 50%, hsl(30 40% 96%) 100%)",
         }}
       />
 
-      {/* Floating orb decorations */}
+      {/* Soft glowing orbs - decorative */}
       <motion.div
-        className="absolute top-20 left-10 w-32 h-32 rounded-full opacity-30"
+        className="absolute top-20 left-10 w-40 h-40 rounded-full opacity-40"
         style={{
-          background: "radial-gradient(circle, rgba(180, 140, 255, 0.3) 0%, transparent 70%)",
+          background: "radial-gradient(circle, hsl(42 70% 85%) 0%, transparent 70%)",
+          filter: "blur(40px)",
         }}
         animate={{
-          y: [0, -20, 0],
+          y: [0, -15, 0],
           scale: [1, 1.1, 1],
         }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute bottom-40 right-10 w-24 h-24 rounded-full opacity-20"
+        className="absolute bottom-40 right-10 w-32 h-32 rounded-full opacity-30"
         style={{
-          background: "radial-gradient(circle, rgba(255, 200, 100, 0.4) 0%, transparent 70%)",
+          background: "radial-gradient(circle, hsl(25 60% 80%) 0%, transparent 70%)",
+          filter: "blur(30px)",
         }}
         animate={{
           y: [0, 15, 0],
@@ -45,14 +41,40 @@ const HeroSection = () => {
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center pt-20">
+        {/* Om Symbol */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
+          className="mb-8"
+        >
+          <motion.span 
+            className="text-7xl md:text-8xl block"
+            style={{
+              color: "hsl(35 50% 65%)",
+              textShadow: "0 0 40px hsl(42 60% 75% / 0.4)",
+            }}
+            animate={{ 
+              scale: [1, 1.03, 1],
+              opacity: [0.85, 1, 0.85],
+            }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            ॐ
+          </motion.span>
+        </motion.div>
+
         {/* App Title */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="mb-6"
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="mb-4"
         >
-          <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-semibold text-cosmic-pearl tracking-wide">
+          <h1 
+            className="font-heading text-4xl md:text-5xl lg:text-6xl font-semibold tracking-wide"
+            style={{ color: "hsl(25 40% 30%)" }}
+          >
             Divya Darshan
           </h1>
         </motion.div>
@@ -60,33 +82,13 @@ const HeroSection = () => {
         {/* Subtitle */}
         <motion.p
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.8 }}
-          className="text-lg md:text-xl text-cosmic-pearl/70 font-light mb-12 max-w-md mx-auto"
+          animate={{ opacity: 0.7 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          className="text-lg md:text-xl font-light mb-12 max-w-md mx-auto"
+          style={{ color: "hsl(30 30% 45%)" }}
         >
           A Divine Space for Peace, Faith & Wisdom
         </motion.p>
-
-        {/* Central Glowing Orb */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.5, duration: 1 }}
-          className="flex justify-center mb-12"
-        >
-          <GlowingOrb size="lg">
-            <motion.span 
-              className="text-5xl md:text-6xl"
-              animate={{ 
-                scale: [1, 1.05, 1],
-                opacity: [0.9, 1, 0.9],
-              }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            >
-              ॐ
-            </motion.span>
-          </GlowingOrb>
-        </motion.div>
 
         {/* Ask a Question Input */}
         <motion.div
@@ -99,17 +101,19 @@ const HeroSection = () => {
             <div
               className="flex items-center gap-3 px-6 py-4 rounded-full cursor-pointer transition-all duration-300 group"
               style={{
-                background: "rgba(255, 255, 255, 0.08)",
-                backdropFilter: "blur(20px)",
-                border: "1px solid rgba(255, 255, 255, 0.15)",
-                boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)",
+                background: "hsl(35 40% 98%)",
+                border: "1px solid hsl(35 40% 85%)",
+                boxShadow: "0 4px 20px hsl(25 40% 50% / 0.1)",
               }}
             >
-              <span className="text-cosmic-pearl/50 flex-1 text-left group-hover:text-cosmic-pearl/70 transition-colors">
+              <span className="text-muted-foreground flex-1 text-left group-hover:text-foreground transition-colors">
                 Ask a Question...
               </span>
-              <div className="w-10 h-10 rounded-full flex items-center justify-center bg-cosmic-violet/30 group-hover:bg-cosmic-violet/50 transition-colors">
-                <Mic className="w-5 h-5 text-cosmic-pearl/70" />
+              <div 
+                className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+                style={{ background: "hsl(25 70% 55% / 0.15)" }}
+              >
+                <Mic className="w-5 h-5 text-primary" />
               </div>
             </div>
           </Link>
@@ -126,7 +130,7 @@ const HeroSection = () => {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="divine-button px-8 py-4 rounded-full text-cosmic-pearl font-medium flex items-center gap-2 justify-center min-w-[180px]"
+              className="divine-button px-8 py-4 rounded-full text-white font-medium flex items-center gap-2 justify-center min-w-[180px]"
             >
               <span>🧘</span> Meditation
             </motion.button>
@@ -135,12 +139,12 @@ const HeroSection = () => {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="px-8 py-4 rounded-full text-cosmic-pearl font-medium flex items-center gap-2 justify-center min-w-[180px]"
+              className="px-8 py-4 rounded-full font-medium flex items-center gap-2 justify-center min-w-[180px]"
               style={{
-                background: "rgba(255, 200, 100, 0.15)",
-                backdropFilter: "blur(10px)",
-                border: "1px solid rgba(255, 200, 100, 0.3)",
-                boxShadow: "0 0 20px rgba(255, 200, 100, 0.15)",
+                color: "hsl(25 50% 40%)",
+                background: "transparent",
+                border: "1px solid hsl(35 40% 80%)",
+                boxShadow: "0 0 20px hsl(42 50% 85% / 0.4)",
               }}
             >
               <span>🕉️</span> Explore Deities
@@ -167,10 +171,10 @@ const HeroSection = () => {
               transition={{ delay: 1.3 + index * 0.1, duration: 0.5 }}
               className="text-center"
             >
-              <p className="text-2xl font-heading font-semibold text-gradient-cosmic">
+              <p className="text-2xl font-heading font-semibold text-gradient-saffron">
                 {stat.value}
               </p>
-              <p className="text-xs text-cosmic-pearl/50">{stat.label}</p>
+              <p className="text-xs text-muted-foreground">{stat.label}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -186,10 +190,10 @@ const HeroSection = () => {
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="w-6 h-10 border border-cosmic-pearl/30 rounded-full flex justify-center"
+          className="w-6 h-10 border border-primary/30 rounded-full flex justify-center"
         >
           <motion.div 
-            className="w-1 h-3 bg-cosmic-gold/60 rounded-full mt-2"
+            className="w-1 h-3 bg-primary/60 rounded-full mt-2"
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           />
