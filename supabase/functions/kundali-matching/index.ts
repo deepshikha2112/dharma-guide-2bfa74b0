@@ -1,10 +1,40 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.89.0";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+// Valid rashi/zodiac signs
+const VALID_RASHIS = [
+  "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
+  "Libra", "Scorpio", "Sagittarius", "Capricorn", "Aquarius", "Pisces"
+] as const;
+
+// Valid relationship types
+const VALID_RELATIONSHIP_TYPES = ["love", "marriage", "engagement", "friendship"] as const;
+
+// Valid languages
+const VALID_LANGUAGES = ["hindi", "english"] as const;
+
+// Partner schema
+const partnerSchema = z.object({
+  name: z.string().min(1, "Name is required").max(100, "Name too long (max 100 chars)").trim(),
+  dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format (use YYYY-MM-DD)"),
+  timeOfBirth: z.string().regex(/^\d{2}:\d{2}$/, "Invalid time format (use HH:MM)").optional().nullable(),
+  placeOfBirth: z.string().min(1, "Place is required").max(200, "Place too long (max 200 chars)").trim(),
+  rashi: z.enum(VALID_RASHIS)
+});
+
+// Input validation schema
+const matchingSchema = z.object({
+  partner1: partnerSchema,
+  partner2: partnerSchema,
+  relationshipType: z.enum(VALID_RELATIONSHIP_TYPES),
+  language: z.enum(VALID_LANGUAGES).default("hindi")
+});
 
 const rashiNames: Record<string, { hindi: string; english: string }> = {
   "Aries": { hindi: "मेष", english: "Aries" },
@@ -60,7 +90,19 @@ serve(async (req) => {
       );
     }
 
-    const { partner1, partner2, relationshipType, language = "hindi" } = await req.json();
+    // Parse and validate input
+    const rawInput = await req.json();
+    const parseResult = matchingSchema.safeParse(rawInput);
+    
+    if (!parseResult.success) {
+      const errorMessage = parseResult.error.issues.map(i => i.message).join(", ");
+      return new Response(
+        JSON.stringify({ error: `Invalid input: ${errorMessage}` }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { partner1, partner2, relationshipType, language } = parseResult.data;
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
