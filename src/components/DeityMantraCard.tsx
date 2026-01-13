@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Music, Bell, ChevronDown, ChevronUp, BookOpen, Headphones } from "lucide-react";
 import { DeityMantra } from "@/data/sacredMantras";
 import MantraAudioPlayer from "./MantraAudioPlayer";
+import MantraJaapCounter from "./MantraJaapCounter";
 
 // Import deity images
 import ganeshaImg from "@/assets/deities/ganesha.jpg";
@@ -40,7 +42,7 @@ interface DeityMantraCardProps {
 
 const DeityMantraCard = ({ deity }: DeityMantraCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [activeTab, setActiveTab] = useState<"read" | "listen">("listen");
+  const [activeTab, setActiveTab] = useState<"listen" | "read" | "jaap">("listen");
 
   const deityImage = deityImages[deity.id] || lakshmiImg;
 
@@ -115,25 +117,38 @@ const DeityMantraCard = ({ deity }: DeityMantraCardProps) => {
               <BookOpen className="w-4 h-4 mr-2" />
               Read
             </Button>
+            <Button
+              variant={activeTab === "jaap" ? "sacred" : "outline"}
+              size="sm"
+              onClick={() => setActiveTab("jaap")}
+              className="flex-1"
+            >
+              <span className="mr-2">🙏</span>
+              Jaap
+            </Button>
           </div>
 
-          {activeTab === "listen" ? (
+          {activeTab === "listen" && (
             <div className="space-y-4">
               {/* Mantra Audio */}
               <MantraAudioPlayer
-                text={`${deity.mantra.sanskrit}. ${deity.mantra.transliteration}. ${deity.mantra.sanskrit}. ${deity.mantra.transliteration}. ${deity.mantra.sanskrit}.`}
+                deityId={deity.id}
+                type="mantra"
                 label="Sacred Mantra"
                 icon={<Music className="w-5 h-5" />}
               />
 
               {/* Aarti Audio */}
               <MantraAudioPlayer
-                text={deity.aarti.lyrics}
+                deityId={deity.id}
+                type="aarti"
                 label={deity.aarti.title}
                 icon={<Bell className="w-5 h-5" />}
               />
             </div>
-          ) : (
+          )}
+
+          {activeTab === "read" && (
             <div className="space-y-4">
               {/* Mantra Text */}
               <div className="bg-muted/30 rounded-lg p-4 space-y-3">
@@ -152,19 +167,49 @@ const DeityMantraCard = ({ deity }: DeityMantraCardProps) => {
                 </p>
               </div>
 
-              {/* Aarti Text */}
+              {/* Aarti Text - Scrollable */}
               <div className="bg-muted/30 rounded-lg p-4 space-y-3">
                 <h4 className="font-medium text-primary flex items-center gap-2">
                   <Bell className="w-4 h-4" />
                   {deity.aarti.title} ({deity.aarti.titleHindi})
                 </h4>
-                <div className="text-sm text-muted-foreground space-y-2">
-                  <p className="leading-relaxed">{deity.aarti.lyrics}</p>
-                  <div className="border-t border-border/50 pt-2 mt-2">
-                    <p className="text-foreground/80 leading-relaxed">{deity.aarti.lyricsHindi}</p>
+                <ScrollArea className="h-[200px] pr-4">
+                  <div className="space-y-4">
+                    <div>
+                      <h5 className="text-xs uppercase text-muted-foreground mb-2">English (Transliteration)</h5>
+                      <p className="text-sm text-foreground leading-relaxed whitespace-pre-line">
+                        {deity.aarti.lyrics}
+                      </p>
+                    </div>
+                    <div className="border-t border-border/50 pt-4">
+                      <h5 className="text-xs uppercase text-muted-foreground mb-2">हिंदी</h5>
+                      <p className="text-sm text-foreground leading-relaxed whitespace-pre-line">
+                        {deity.aarti.lyricsHindi}
+                      </p>
+                    </div>
                   </div>
-                </div>
+                </ScrollArea>
               </div>
+            </div>
+          )}
+
+          {activeTab === "jaap" && (
+            <div className="space-y-4">
+              {/* Mantra display for reference */}
+              <div className="bg-muted/30 rounded-lg p-4 text-center">
+                <p className="text-xl font-heading text-foreground mb-1">
+                  {deity.mantra.sanskrit}
+                </p>
+                <p className="text-sm text-primary">
+                  {deity.mantra.transliteration}
+                </p>
+              </div>
+
+              {/* Jaap Counter */}
+              <MantraJaapCounter 
+                mantra={deity.mantra.transliteration}
+                deityName={deity.name}
+              />
             </div>
           )}
         </div>

@@ -7,14 +7,24 @@ export interface DeityMantra {
     sanskrit: string;
     transliteration: string;
     meaning: string;
+    audioUrl?: string; // URL to pre-recorded mantra audio
   };
   aarti: {
     title: string;
     titleHindi: string;
     lyrics: string;
     lyricsHindi: string;
+    audioUrl?: string; // URL to pre-recorded aarti audio
   };
 }
+
+// Storage bucket base URL for audio files
+export const AUDIO_BUCKET_URL = `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/devotional-audio`;
+
+// Helper to get audio URL from bucket
+export const getAudioUrl = (deityId: string, type: 'mantra' | 'aarti'): string => {
+  return `${AUDIO_BUCKET_URL}/${deityId}/${type}.mp3`;
+};
 
 export const sacredMantras: DeityMantra[] = [
   {
