@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.kundali-matching]
 verify_jwt = false
+
+[functions.meditation-music]
+verify_jwt = false
