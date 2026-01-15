@@ -27,7 +27,7 @@ const VALID_LANGUAGES = ["hindi", "english"] as const;
 const guidanceSchema = z.object({
   name: z.string().min(1, "Name is required").max(100, "Name too long (max 100 chars)").trim(),
   dateOfBirth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format (use YYYY-MM-DD)"),
-  timeOfBirth: z.string().regex(/^\d{2}:\d{2}$/, "Invalid time format (use HH:MM)").optional().nullable(),
+  timeOfBirth: z.string().transform(val => val === "" ? null : val).pipe(z.string().regex(/^\d{2}:\d{2}$/, "Invalid time format (use HH:MM)").nullable()).optional(),
   placeOfBirth: z.string().min(1, "Place is required").max(200, "Place too long (max 200 chars)").trim(),
   gender: z.enum(VALID_GENDERS).optional(),
   problemCategory: z.enum(VALID_CATEGORIES),
