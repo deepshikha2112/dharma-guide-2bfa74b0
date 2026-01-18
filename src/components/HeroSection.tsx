@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Mic } from "lucide-react";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+  
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Light Temple Background Gradient */}
@@ -97,45 +99,44 @@ const HeroSection = () => {
           transition={{ delay: 0.8, duration: 0.8 }}
           className="max-w-md mx-auto mb-12"
         >
-          <Link to="/guidance">
-            <div
-              className="flex items-center gap-3 px-6 py-4 rounded-full cursor-pointer transition-all duration-300 group"
-              style={{
-                background: "hsl(35 40% 98%)",
-                border: "1px solid hsl(35 40% 85%)",
-                boxShadow: "0 4px 20px hsl(25 40% 50% / 0.1)",
-              }}
+          <div
+            onClick={() => navigate("/guidance")}
+            className="flex items-center gap-3 px-6 py-4 rounded-full cursor-pointer transition-all duration-300 group"
+            style={{
+              background: "hsl(35 40% 98%)",
+              border: "1px solid hsl(35 40% 85%)",
+              boxShadow: "0 4px 20px hsl(25 40% 50% / 0.1)",
+            }}
+          >
+            <span className="text-muted-foreground flex-1 text-left group-hover:text-foreground transition-colors">
+              Ask a Question...
+            </span>
+            <div 
+              className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+              style={{ background: "hsl(25 70% 55% / 0.15)" }}
             >
-              <span className="text-muted-foreground flex-1 text-left group-hover:text-foreground transition-colors">
-                Ask a Question...
-              </span>
-              <div 
-                className="w-10 h-10 rounded-full flex items-center justify-center transition-colors"
-                style={{ background: "hsl(25 70% 55% / 0.15)" }}
-              >
-                <Mic className="w-5 h-5 text-primary" />
-              </div>
+              <Mic className="w-5 h-5 text-primary" />
             </div>
-          </Link>
+          </div>
         </motion.div>
 
-        {/* Action Buttons */}
+        {/* Action Buttons - General entry points only, no spiritual logic */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.8 }}
           className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
         >
-          <Link to="/meditation">
+          <a href="#deities">
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="divine-button px-8 py-4 rounded-full text-white font-medium flex items-center gap-2 justify-center min-w-[180px]"
             >
-              <span>🧘</span> Meditation
+              <span>🕉️</span> Explore Deities
             </motion.button>
-          </Link>
-          <a href="#deities">
+          </a>
+          <a href="#categories">
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -147,7 +148,7 @@ const HeroSection = () => {
                 boxShadow: "0 0 20px hsl(42 50% 85% / 0.4)",
               }}
             >
-              <span>🕉️</span> Explore Deities
+              <span>📿</span> Spiritual Categories
             </motion.button>
           </a>
         </motion.div>
