@@ -10,6 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { getRashiFromDate, rashis } from "@/data/deities";
 import { Heart, User, Calendar, MapPin, Clock, Loader2, Globe, Users, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface PartnerProfile {
   name: string;
@@ -28,6 +30,7 @@ const relationshipTypes = [
 
 const Compatibility = () => {
   const navigate = useNavigate();
+  const { user, session } = useAuth();
   const [language, setLanguage] = useState<"hindi" | "english" | null>(null);
   const [step, setStep] = useState(0); // 0 = language selection
   const [partner1, setPartner1] = useState<PartnerProfile>({
@@ -67,14 +70,20 @@ const Compatibility = () => {
   const selectedRelType = relationshipTypes.find(r => r.id === relationshipType);
 
   const streamCompatibility = useCallback(async () => {
+    // Check if user is authenticated
+    if (!session?.access_token) {
+      toast.error(isHindi ? "कृपया पहले लॉगिन करें।" : "Please login first.");
+      navigate("/auth");
+      return;
+    }
+
     setIsLoading(true);
     setResult("");
     setStep(4);
 
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
     
-    if (!supabaseUrl || !supabaseKey) {
+    if (!supabaseUrl) {
       console.error("Missing environment variables");
       toast.error(isHindi ? "सर्वर कॉन्फ़िगरेशन में त्रुटि है।" : "Server configuration error.");
       setStep(3);
@@ -88,7 +97,7 @@ const Compatibility = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${supabaseKey}`,
+          "Authorization": `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
           partner1,
@@ -175,7 +184,7 @@ const Compatibility = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [partner1, partner2, relationshipType, language, isHindi]);
+  }, [partner1, partner2, relationshipType, language, isHindi, session, navigate]);
 
   const resetForm = () => {
     setStep(0);
