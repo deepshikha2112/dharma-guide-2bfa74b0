@@ -54,10 +54,20 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-secondary-foreground/20 pt-8 text-center">
+        <div className="border-t border-secondary-foreground/20 pt-8 text-center space-y-4">
           <p className="text-sm text-secondary-foreground/60 mb-2">
             "सर्वे भवन्तु सुखिनः" — May all beings be happy
           </p>
+          
+          {/* YouTube Content Disclaimer */}
+          <div className="bg-secondary-foreground/5 rounded-lg p-4 max-w-2xl mx-auto">
+            <p className="text-xs text-secondary-foreground/50 leading-relaxed">
+              <strong>Content Disclaimer:</strong> This app does not host or own any video or audio content. 
+              All Aarti and Bhajan videos are linked directly to YouTube. 
+              Ownership and copyrights belong to the respective creators and YouTube.
+            </p>
+          </div>
+
           <p className="text-xs text-secondary-foreground/40">
             © 2024 Divya Darshan. Made with 🙏 and devotion.
           </p>
