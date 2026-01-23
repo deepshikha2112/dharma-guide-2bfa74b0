@@ -386,13 +386,15 @@ const AartiDetail = ({ aarti, onBack }: AartiDetailProps) => {
                     <p className="text-xs text-muted-foreground">Opens in YouTube app or browser</p>
                   </div>
                 </div>
-                <Button
-                  onClick={() => openYouTubeLink(matchingLink.youtubeUrl)}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white"
+                <a
+                  href={matchingLink.youtubeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 w-full py-3 rounded-lg bg-red-600 hover:bg-red-700 text-white font-medium transition-colors"
                 >
-                  <ExternalLink className="w-4 h-4 mr-2" />
+                  <ExternalLink className="w-4 h-4" />
                   Watch Aarti on YouTube
-                </Button>
+                </a>
                 <p className="text-xs text-muted-foreground text-center mt-2">
                   Content © respective creators on YouTube
                 </p>
