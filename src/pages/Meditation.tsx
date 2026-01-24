@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MeditationMoodCard from "@/components/MeditationMoodCard";
 import MeditationPlayer from "@/components/MeditationPlayer";
 import TrackList from "@/components/TrackList";
 import MoodSoundPlayer from "@/components/MoodSoundPlayer";
+import BackButton from "@/components/BackButton";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, Sparkles, Heart, Music } from "lucide-react";
+import { Sparkles, Heart, Music } from "lucide-react";
 import { meditationMoods, MeditationMood, MeditationTrack } from "@/data/meditationMoods";
 
 const Meditation = () => {
@@ -43,10 +43,7 @@ const Meditation = () => {
       
       <section className="pt-24 pb-12 bg-gradient-to-b from-primary/5 to-background">
         <div className="container mx-auto px-4">
-          <Link to="/" className="inline-flex items-center text-primary hover:text-primary/80 mb-8 transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
-          </Link>
+          <BackButton label="Back to Home" />
 
           <div className="text-center mb-12">
             <span className="text-4xl mb-4 block">🧘‍♂️</span>

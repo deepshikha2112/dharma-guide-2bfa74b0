@@ -3,9 +3,8 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Music, Bell, ChevronDown, ChevronUp, BookOpen, Headphones } from "lucide-react";
+import { Music, Bell, ChevronDown, ChevronUp, BookOpen } from "lucide-react";
 import { DeityMantra } from "@/data/sacredMantras";
-import MantraAudioPlayer from "./MantraAudioPlayer";
 import MantraJaapCounter from "./MantraJaapCounter";
 
 // Import deity images
@@ -42,7 +41,7 @@ interface DeityMantraCardProps {
 
 const DeityMantraCard = ({ deity }: DeityMantraCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [activeTab, setActiveTab] = useState<"listen" | "read" | "jaap">("listen");
+  const [activeTab, setActiveTab] = useState<"read" | "jaap">("read");
 
   const deityImage = deityImages[deity.id] || lakshmiImg;
 
@@ -78,12 +77,12 @@ const DeityMantraCard = ({ deity }: DeityMantraCardProps) => {
           {/* Expand/Collapse */}
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="text-xs border-primary/30 text-primary">
-              <Music className="w-3 h-3 mr-1" />
-              Mantra
+              <BookOpen className="w-3 h-3 mr-1" />
+              Read
             </Badge>
             <Badge variant="outline" className="text-xs border-primary/30 text-primary">
-              <Bell className="w-3 h-3 mr-1" />
-              Aarti
+              <span className="mr-1">🙏</span>
+              Jaap
             </Badge>
             {isExpanded ? (
               <ChevronUp className="w-5 h-5 text-muted-foreground" />
@@ -99,15 +98,6 @@ const DeityMantraCard = ({ deity }: DeityMantraCardProps) => {
         <div className="px-4 pb-4 space-y-4 border-t border-border/50 pt-4">
           {/* Mode Toggle */}
           <div className="flex gap-2">
-            <Button
-              variant={activeTab === "listen" ? "sacred" : "outline"}
-              size="sm"
-              onClick={() => setActiveTab("listen")}
-              className="flex-1"
-            >
-              <Headphones className="w-4 h-4 mr-2" />
-              Listen
-            </Button>
             <Button
               variant={activeTab === "read" ? "sacred" : "outline"}
               size="sm"
@@ -127,26 +117,6 @@ const DeityMantraCard = ({ deity }: DeityMantraCardProps) => {
               Jaap
             </Button>
           </div>
-
-          {activeTab === "listen" && (
-            <div className="space-y-4">
-              {/* Mantra Audio */}
-              <MantraAudioPlayer
-                deityId={deity.id}
-                type="mantra"
-                label="Sacred Mantra"
-                icon={<Music className="w-5 h-5" />}
-              />
-
-              {/* Aarti Audio */}
-              <MantraAudioPlayer
-                deityId={deity.id}
-                type="aarti"
-                label={deity.aarti.title}
-                icon={<Bell className="w-5 h-5" />}
-              />
-            </div>
-          )}
 
           {activeTab === "read" && (
             <div className="space-y-4">

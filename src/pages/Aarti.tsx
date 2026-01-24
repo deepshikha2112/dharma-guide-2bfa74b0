@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Music, Sun, Moon, Clock, ChevronRight, ArrowLeft, Play, Pause, Upload } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Music, Sun, Moon, Clock, ChevronRight } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -9,8 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
 import TempleBackground from "@/components/TempleBackground";
+import BackButton from "@/components/BackButton";
 import { aartis, getAartisByTiming, type Aarti } from "@/data/aartiData";
-import { toast } from "sonner";
 
 const AartiPage = () => {
   const [selectedAarti, setSelectedAarti] = useState<Aarti | null>(null);
@@ -205,38 +205,6 @@ interface AartiDetailProps {
 }
 
 const AartiDetail = ({ aarti, onBack }: AartiDetailProps) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [audioFile, setAudioFile] = useState<File | null>(null);
-  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.type.startsWith("audio/")) {
-      setAudioFile(file);
-      toast.success("Audio file loaded! Click play to listen.");
-    } else {
-      toast.error("Please select a valid audio file");
-    }
-  };
-
-  const togglePlay = () => {
-    if (!audioFile) {
-      toast.info("Please upload an MP3 file first");
-      return;
-    }
-
-    if (isPlaying && audio) {
-      audio.pause();
-      setIsPlaying(false);
-    } else {
-      const newAudio = new Audio(URL.createObjectURL(audioFile));
-      newAudio.onended = () => setIsPlaying(false);
-      newAudio.play();
-      setAudio(newAudio);
-      setIsPlaying(true);
-    }
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -244,10 +212,7 @@ const AartiDetail = ({ aarti, onBack }: AartiDetailProps) => {
       exit={{ opacity: 0, x: 20 }}
     >
       {/* Back Button */}
-      <Button variant="ghost" onClick={onBack} className="mb-4">
-        <ArrowLeft className="w-4 h-4 mr-2" />
-        Back to Aartis
-      </Button>
+      <BackButton label="Back to Aartis" />
 
       {/* Header */}
       <div className="text-center mb-6">
@@ -277,48 +242,6 @@ const AartiDetail = ({ aarti, onBack }: AartiDetailProps) => {
       <Card className="temple-card-warm mb-6">
         <CardContent className="p-4">
           <p className="text-foreground">{aarti.significance}</p>
-        </CardContent>
-      </Card>
-
-      {/* Audio Controls */}
-      <Card className="temple-card-saffron mb-6">
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Button
-                variant="outline"
-                size="icon"
-                className="rounded-full w-12 h-12"
-                onClick={togglePlay}
-              >
-                {isPlaying ? (
-                  <Pause className="w-5 h-5" />
-                ) : (
-                  <Play className="w-5 h-5 ml-0.5" />
-                )}
-              </Button>
-              <div>
-                <p className="font-medium">
-                  {audioFile ? audioFile.name : "No audio file"}
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Upload your own MP3 for authentic experience
-                </p>
-              </div>
-            </div>
-            <label className="cursor-pointer">
-              <input
-                type="file"
-                accept="audio/*"
-                onChange={handleFileUpload}
-                className="hidden"
-              />
-              <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors">
-                <Upload className="w-4 h-4 text-primary" />
-                <span className="text-sm text-primary">Upload MP3</span>
-              </div>
-            </label>
-          </div>
         </CardContent>
       </Card>
 

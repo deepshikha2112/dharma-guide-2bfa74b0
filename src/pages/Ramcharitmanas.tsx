@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import BackButton from "@/components/BackButton";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,7 +10,6 @@ import { Progress } from "@/components/ui/progress";
 import { ramcharitmanasKands, Kand, RamcharitmanasChapter } from "@/data/ramcharitmanas";
 import ChapterAudioReader from "@/components/ChapterAudioReader";
 import { 
-  ArrowLeft, 
   BookOpen, 
   ChevronLeft, 
   ChevronRight,
@@ -86,10 +85,7 @@ const Ramcharitmanas = () => {
         </div>
 
         <div className="container mx-auto px-4 relative">
-          <Link to="/" className="inline-flex items-center text-primary hover:text-primary/80 mb-8 transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Home
-          </Link>
+          <BackButton label="Back to Home" />
           
           <div className="flex flex-col items-center text-center">
             <div className="w-32 h-32 md:w-40 md:h-40 rounded-full flex items-center justify-center text-6xl md:text-7xl bg-gradient-to-br from-orange-400 to-red-500 shadow-glow mb-6 animate-float">

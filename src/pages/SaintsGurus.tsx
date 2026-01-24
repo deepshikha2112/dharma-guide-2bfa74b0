@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import BackButton from "@/components/BackButton";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -216,7 +217,9 @@ const SaintsGurus = () => {
       
       {/* Hero Section */}
       <section className="pt-24 pb-12 bg-gradient-to-b from-primary/10 to-background">
-        <div className="container mx-auto px-4 text-center">
+        <div className="container mx-auto px-4">
+          <BackButton label="Back to Home" />
+          <div className="text-center">
           <Users className="w-12 h-12 mx-auto text-primary mb-4" />
           <h1 className="font-heading text-4xl md:text-5xl font-bold text-foreground mb-4">
             संत और गुरु
@@ -225,6 +228,7 @@ const SaintsGurus = () => {
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             महान संतों की जीवन गाथा, उनकी शिक्षाएं और आधुनिक जीवन में उनका उपयोग।
           </p>
+          </div>
         </div>
       </section>
 

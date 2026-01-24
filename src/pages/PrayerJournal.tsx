@@ -9,6 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
 import TempleBackground from "@/components/TempleBackground";
+import BackButton from "@/components/BackButton";
 import { toast } from "sonner";
 
 interface JournalEntry {
@@ -101,6 +102,9 @@ const PrayerJournal = () => {
       <Header />
 
       <div className="container mx-auto px-4 pt-24 pb-8">
+        {/* Back Button */}
+        <BackButton label="Back to Home" />
+        
         {/* Page Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

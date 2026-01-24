@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, BookOpen, Utensils, CheckCircle, XCircle, Star, ChevronRight, ArrowLeft } from "lucide-react";
+import { Calendar, BookOpen, Utensils, CheckCircle, XCircle, Star, ChevronRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Header from "@/components/Header";
 import BottomNavigation from "@/components/BottomNavigation";
 import TempleBackground from "@/components/TempleBackground";
+import BackButton from "@/components/BackButton";
 import { vrats, type Vrat } from "@/data/vratData";
 
 const VratGuide = () => {
@@ -45,6 +45,8 @@ const VratList = ({ onSelect }: VratListProps) => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
     >
+      {/* Back Button */}
+      <BackButton label="Back to Home" />
       {/* Page Header */}
       <div className="text-center mb-8">
         <span className="text-4xl mb-4 block">🙏</span>
@@ -134,14 +136,7 @@ const VratDetail = ({ vrat, onBack }: VratDetailProps) => {
       exit={{ opacity: 0, x: 20 }}
     >
       {/* Back Button */}
-      <Button
-        variant="ghost"
-        onClick={onBack}
-        className="mb-4"
-      >
-        <ArrowLeft className="w-4 h-4 mr-2" />
-        Back to Vrat List
-      </Button>
+      <BackButton label="Back to Vrat List" />
 
       {/* Header */}
       <div className="text-center mb-6">

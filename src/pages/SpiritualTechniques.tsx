@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import BackButton from "@/components/BackButton";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -265,7 +266,9 @@ const SpiritualTechniques = () => {
       
       {/* Hero Section */}
       <section className="pt-24 pb-12 bg-gradient-to-b from-primary/10 to-background">
-        <div className="container mx-auto px-4 text-center">
+        <div className="container mx-auto px-4">
+          <BackButton label="Back to Home" />
+          <div className="text-center">
           <Brain className="w-12 h-12 mx-auto text-primary mb-4" />
           <h1 className="font-heading text-4xl md:text-5xl font-bold text-foreground mb-4">
             आध्यात्मिक तकनीकें
@@ -279,6 +282,7 @@ const SpiritualTechniques = () => {
             <span className="px-3 py-1 bg-muted rounded-full text-sm">✅ कोई चमत्कार का दावा नहीं</span>
             <span className="px-3 py-1 bg-muted rounded-full text-sm">✅ वैज्ञानिक दृष्टिकोण</span>
             <span className="px-3 py-1 bg-muted rounded-full text-sm">✅ सरल विधि</span>
+          </div>
           </div>
         </div>
       </section>

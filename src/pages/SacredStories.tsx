@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import BackButton from "@/components/BackButton";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -158,7 +159,9 @@ const SacredStories = () => {
       
       {/* Hero Section */}
       <section className="pt-24 pb-12 bg-gradient-to-b from-primary/10 to-background">
-        <div className="container mx-auto px-4 text-center">
+        <div className="container mx-auto px-4">
+          <BackButton label="Back to Home" />
+          <div className="text-center">
           <BookOpen className="w-12 h-12 mx-auto text-primary mb-4" />
           <h1 className="font-heading text-4xl md:text-5xl font-bold text-foreground mb-4">
             पवित्र कथाएं
@@ -168,6 +171,7 @@ const SacredStories = () => {
             पुराणों और इतिहास से देवी-देवताओं की दिव्य कथाएं। 
             धर्म, कर्म और जीवन के मूल्यों पर आधारित शिक्षाप्रद कहानियां।
           </p>
+          </div>
         </div>
       </section>
 

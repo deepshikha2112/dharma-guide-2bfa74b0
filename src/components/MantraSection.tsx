@@ -30,10 +30,7 @@ const MantraSection = () => {
             may all beings see what is auspicious, may no one suffer."
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button variant="sacred">
-              Listen to Mantra
-            </Button>
+          <div className="flex justify-center">
             <Button variant="outline">
               Learn Meaning
             </Button>

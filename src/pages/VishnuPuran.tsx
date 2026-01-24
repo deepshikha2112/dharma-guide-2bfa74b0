@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ChapterAudioReader from '@/components/ChapterAudioReader';
+import BackButton from '@/components/BackButton';
 import { vishnuPuranChapters } from '@/data/vishnuPuranChapters';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -44,6 +45,9 @@ const VishnuPuran = () => {
       <Header />
       
       <main className="container mx-auto px-4 py-8 mt-16">
+        {/* Back Button */}
+        <BackButton label="Back to Home" />
+        
         {/* Hero Section */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 rounded-full text-blue-800 text-sm mb-4">

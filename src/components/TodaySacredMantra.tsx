@@ -20,7 +20,7 @@ const TodaySacredMantra = () => {
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-4">
             <Sparkles className="w-4 h-4 text-primary" />
-            <span className="text-primary font-medium text-sm">Daily Divine Audio</span>
+            <span className="text-primary font-medium text-sm">Daily Divine Wisdom</span>
           </div>
           
           <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-3">
@@ -29,7 +29,7 @@ const TodaySacredMantra = () => {
           
           <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
             Begin your spiritual journey with powerful mantras and traditional aartis. 
-            Tap on any deity to listen to their sacred chants and feel the divine presence.
+            Tap on any deity to read their sacred texts and practice mantra jaap.
           </p>
 
           {/* Search */}

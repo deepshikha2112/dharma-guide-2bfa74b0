@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import BackButton from "@/components/BackButton";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -209,7 +210,9 @@ const Compatibility = () => {
       <Header />
       
       <section className="pt-24 pb-12 bg-gradient-to-b from-primary/10 to-background">
-        <div className="container mx-auto px-4 text-center">
+        <div className="container mx-auto px-4">
+          <BackButton label="Back to Guidance" fallbackPath="/guidance" />
+          <div className="text-center">
           <Heart className="w-12 h-12 mx-auto text-primary mb-4" />
           <h1 className="font-heading text-4xl md:text-5xl font-bold text-foreground mb-4">
             {isHindi ? "कुंडली मिलान" : language === "english" ? "Kundali Matching" : "कुंडली मिलान | Kundali Matching"}
@@ -222,6 +225,7 @@ const Compatibility = () => {
                 : "वैदिक ज्योतिष के अनुसार अनुकूलता जाँचें।"
             }
           </p>
+          </div>
         </div>
       </section>
 
