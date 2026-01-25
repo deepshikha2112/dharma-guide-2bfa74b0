@@ -1,13 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Home, BookOpen, Music, Star, Sparkles } from "lucide-react";
+import { Home, BookOpen, Music, Calendar, Star } from "lucide-react";
 
 const navItems = [
   { icon: Home, label: "Home", path: "/home" },
-  { icon: BookOpen, label: "Stories", path: "/sacred-stories" },
+  { icon: BookOpen, label: "Journal", path: "/prayer-journal" },
+  { icon: Calendar, label: "Vrat", path: "/vrat-guide" },
   { icon: Music, label: "Aarti", path: "/aarti" },
   { icon: Star, label: "Astro", path: "/guidance" },
-  { icon: Sparkles, label: "Info", path: "/prediction-info" },
 ];
 
 const BottomNavigation = () => {
