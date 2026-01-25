@@ -68,6 +68,9 @@ const AartiList = ({ groupedAartis, timingFilter, onFilterChange, onSelect }: Aa
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -20 }}
     >
+      {/* Back Button */}
+      <BackButton label="Back to Home" />
+      
       {/* Page Header */}
       <div className="text-center mb-8">
         <span className="text-4xl mb-4 block">🪔</span>

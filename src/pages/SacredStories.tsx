@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BackButton from "@/components/BackButton";
+import BottomNavigation from "@/components/BottomNavigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -55,7 +56,7 @@ const additionalDeities = [
     id: "brahma",
     name: "Lord Brahma",
     sanskrit: "ब्रह्मा जी",
-    description: "सृष्टि के रचयिता, चार वेदों के ज्ञाता",
+    description: "सृष्टि के रचयिता, चार वेदों के ज्ञाता। ब्रह्मा जी ने इस संसार की रचना की और वेदों का ज्ञान दिया।",
     emoji: "🪷",
     image: null,
     stories: [
@@ -69,7 +70,7 @@ const additionalDeities = [
     id: "kali",
     name: "Goddess Kali",
     sanskrit: "माँ काली",
-    description: "समय और परिवर्तन की देवी, बुराई का नाश करने वाली",
+    description: "समय और परिवर्तन की देवी, बुराई का नाश करने वाली। माँ काली का रूप भयंकर है पर भक्तों के लिए करुणामयी।",
     emoji: "🔥",
     image: null,
     stories: [
@@ -83,7 +84,7 @@ const additionalDeities = [
     id: "saraswati",
     name: "Goddess Saraswati",
     sanskrit: "माँ सरस्वती",
-    description: "विद्या, संगीत और कला की देवी",
+    description: "विद्या, संगीत और कला की देवी। माँ सरस्वती छात्रों और कलाकारों की आराध्य देवी हैं।",
     emoji: "📚",
     image: null,
     stories: [
@@ -97,7 +98,7 @@ const additionalDeities = [
     id: "surya",
     name: "Lord Surya",
     sanskrit: "सूर्य देव",
-    description: "प्रकाश, ऊर्जा और जीवन के देवता",
+    description: "प्रकाश, ऊर्जा और जीवन के देवता। सूर्य देव सभी जीवों को प्राण शक्ति देते हैं।",
     emoji: "☀️",
     image: null,
     stories: [
@@ -111,7 +112,7 @@ const additionalDeities = [
     id: "shani",
     name: "Lord Shani",
     sanskrit: "शनि देव",
-    description: "कर्मों के न्यायाधीश, धैर्य और अनुशासन के देवता",
+    description: "कर्मों के न्यायाधीश, धैर्य और अनुशासन के देवता। शनि देव सत्य और न्याय के प्रतीक हैं।",
     emoji: "⚫",
     image: null,
     stories: [
@@ -123,10 +124,74 @@ const additionalDeities = [
   }
 ];
 
+// Epic stories collection
+const epicStories = [
+  {
+    id: "ramayan",
+    title: "रामायण",
+    titleEn: "Ramayana",
+    description: "भगवान राम की दिव्य कथा - मर्यादा पुरुषोत्तम की जीवन यात्रा",
+    emoji: "🏹",
+    chapters: 7,
+    keyLessons: ["धर्म का पालन", "पति-पत्नी का प्रेम", "भाई का त्याग"],
+    path: "/ramcharitmanas"
+  },
+  {
+    id: "mahabharat",
+    title: "महाभारत",
+    titleEn: "Mahabharata",
+    description: "धर्म और अधर्म की महागाथा - पांडवों और कौरवों की कहानी",
+    emoji: "⚔️",
+    chapters: 18,
+    keyLessons: ["कर्म का सिद्धांत", "धर्म की रक्षा", "सत्य की विजय"],
+    path: "/bhagavad-gita"
+  },
+  {
+    id: "shivpuran",
+    title: "शिव पुराण",
+    titleEn: "Shiva Purana",
+    description: "भगवान शिव की दिव्य लीलाएं और महिमा",
+    emoji: "🔱",
+    chapters: 12,
+    keyLessons: ["वैराग्य", "तपस्या", "भक्ति"],
+    path: "/deity/shiva"
+  },
+  {
+    id: "vishnupuran",
+    title: "विष्णु पुराण",
+    titleEn: "Vishnu Purana",
+    description: "भगवान विष्णु के अवतारों और लीलाओं की कथाएं",
+    emoji: "🪷",
+    chapters: 6,
+    keyLessons: ["धर्म संस्थापन", "भक्ति", "सेवा"],
+    path: "/vishnu-puran"
+  },
+  {
+    id: "devibhagwat",
+    title: "देवी भागवत",
+    titleEn: "Devi Bhagwat",
+    description: "आदि शक्ति माँ दुर्गा की महिमा और नवरात्रि कथाएं",
+    emoji: "🦁",
+    chapters: 12,
+    keyLessons: ["शक्ति उपासना", "बुराई पर विजय", "नारी शक्ति"],
+    path: "/deity/durga"
+  },
+  {
+    id: "ganeshpuran",
+    title: "गणेश पुराण",
+    titleEn: "Ganesha Purana",
+    description: "श्री गणेश जी की उत्पत्ति और दिव्य लीलाएं",
+    emoji: "🐘",
+    chapters: 8,
+    keyLessons: ["विघ्न हरण", "बुद्धि", "विनम्रता"],
+    path: "/deity/ganesha"
+  }
+];
+
 const SacredStories = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState("epics");
 
   // Combine main deities with additional ones
   const allDeities = [
@@ -154,7 +219,7 @@ const SacredStories = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background pb-20">
       <Header />
       
       {/* Hero Section */}
@@ -195,6 +260,9 @@ const SacredStories = () => {
         <div className="container mx-auto px-4">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="flex flex-wrap justify-center gap-2 h-auto bg-transparent mb-8">
+              <TabsTrigger value="epics" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                महाकाव्य
+              </TabsTrigger>
               <TabsTrigger value="all" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 सभी देवता
               </TabsTrigger>
@@ -208,6 +276,53 @@ const SacredStories = () => {
                 </TabsTrigger>
               ))}
             </TabsList>
+
+            {/* Epic Stories Tab */}
+            <TabsContent value="epics" className="mt-0">
+              <div className="text-center mb-8">
+                <h2 className="font-heading text-2xl font-semibold text-foreground">महाकाव्य और पुराण</h2>
+                <p className="text-muted-foreground">Epic Stories & Puranas</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {epicStories.map((story, index) => (
+                  <Card 
+                    key={story.id}
+                    className="group overflow-hidden cursor-pointer hover:shadow-lg hover:border-primary/50 transition-all duration-300 animate-fade-in-up"
+                    style={{ animationDelay: `${index * 50}ms` }}
+                    onClick={() => navigate(story.path)}
+                  >
+                    <div className="h-32 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                      <span className="text-6xl">{story.emoji}</span>
+                    </div>
+                    <div className="p-4 space-y-3">
+                      <div>
+                        <h3 className="font-heading text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                          {story.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">{story.titleEn}</p>
+                      </div>
+                      <p className="text-sm text-muted-foreground line-clamp-2">
+                        {story.description}
+                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {story.keyLessons.map((lesson, i) => (
+                          <span key={i} className="text-[10px] px-2 py-0.5 bg-primary/10 text-primary rounded-full">
+                            {lesson}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex items-center justify-between pt-2">
+                        <span className="text-xs text-muted-foreground">{story.chapters} अध्याय</span>
+                        <div className="flex items-center text-primary text-sm font-medium group-hover:translate-x-1 transition-transform">
+                          <span>पढ़ें</span>
+                          <ChevronRight className="w-4 h-4 ml-1" />
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
 
             <TabsContent value="all" className="mt-0">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -276,6 +391,7 @@ const SacredStories = () => {
       </section>
 
       <Footer />
+      <BottomNavigation />
     </main>
   );
 };

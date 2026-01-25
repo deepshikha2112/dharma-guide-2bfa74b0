@@ -1,13 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Home, Compass, BookOpen, Mic, Settings } from "lucide-react";
+import { Home, BookOpen, Music, Star, Sparkles } from "lucide-react";
 
 const navItems = [
-  { icon: Home, label: "Home", path: "/" },
-  { icon: Compass, label: "Meditation", path: "/meditation" },
-  { icon: BookOpen, label: "Stories", path: "/bhagavad-gita" },
-  { icon: Mic, label: "Mantra", path: "/#mantra-section" },
-  { icon: Settings, label: "Settings", path: "/settings" },
+  { icon: Home, label: "Home", path: "/home" },
+  { icon: BookOpen, label: "Stories", path: "/sacred-stories" },
+  { icon: Music, label: "Aarti", path: "/aarti" },
+  { icon: Star, label: "Astro", path: "/guidance" },
+  { icon: Sparkles, label: "Info", path: "/prediction-info" },
 ];
 
 const BottomNavigation = () => {
@@ -17,20 +17,16 @@ const BottomNavigation = () => {
     <motion.nav
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.5, duration: 0.5 }}
-      className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 md:hidden"
+      transition={{ delay: 0.3, duration: 0.4 }}
+      className="fixed bottom-0 left-0 right-0 z-50 md:hidden"
     >
       <div
-        className="flex items-center gap-1 px-4 py-3 rounded-full"
+        className="flex items-center justify-around px-2 py-2"
         style={{
-          background: "rgba(20, 10, 40, 0.85)",
+          background: "linear-gradient(180deg, rgba(255,250,245,0.95) 0%, rgba(255,248,240,1) 100%)",
           backdropFilter: "blur(20px)",
-          border: "1px solid rgba(180, 140, 255, 0.2)",
-          boxShadow: `
-            0 8px 32px rgba(0, 0, 0, 0.3),
-            0 0 40px rgba(180, 140, 255, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1)
-          `,
+          borderTop: "1px solid hsl(35 40% 85% / 0.6)",
+          boxShadow: "0 -4px 20px rgba(0, 0, 0, 0.05)",
         }}
       >
         {navItems.map((item) => {
@@ -41,36 +37,32 @@ const BottomNavigation = () => {
             <Link
               key={item.path}
               to={item.path}
-              className="relative px-4 py-2 rounded-full transition-all duration-300"
+              className="relative flex-1 flex flex-col items-center py-2 px-1"
             >
               {isActive && (
                 <motion.div
-                  layoutId="activeTab"
-                  className="absolute inset-0 rounded-full"
-                  style={{
-                    background: "linear-gradient(135deg, rgba(180, 140, 255, 0.3), rgba(255, 200, 100, 0.2))",
-                    boxShadow: "0 0 20px rgba(180, 140, 255, 0.3)",
-                  }}
+                  layoutId="activeNavTab"
+                  className="absolute inset-x-2 top-0 h-1 rounded-full bg-primary"
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
                 />
               )}
               <motion.div
-                className="relative z-10 flex flex-col items-center gap-1"
+                className="flex flex-col items-center gap-1"
                 animate={{
-                  scale: isActive ? 1.1 : 1,
+                  scale: isActive ? 1.05 : 1,
                 }}
                 transition={{ duration: 0.2 }}
               >
                 <Icon
                   className={`w-5 h-5 transition-colors duration-300 ${
                     isActive 
-                      ? "text-cosmic-gold drop-shadow-[0_0_8px_rgba(255,200,100,0.6)]" 
-                      : "text-white/60"
+                      ? "text-primary" 
+                      : "text-muted-foreground"
                   }`}
                 />
                 <span
                   className={`text-[10px] font-medium transition-colors duration-300 ${
-                    isActive ? "text-cosmic-gold" : "text-white/50"
+                    isActive ? "text-primary" : "text-muted-foreground"
                   }`}
                 >
                   {item.label}

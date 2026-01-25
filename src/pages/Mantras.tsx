@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { ArrowLeft, Play, Volume2, Clock, Calendar } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowLeft, Clock, Calendar } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import BackButton from "@/components/BackButton";
 import BottomNavigation from "@/components/BottomNavigation";
 
 interface Mantra {
@@ -223,10 +222,7 @@ const Mantras = () => {
       
       <main className="container mx-auto px-4 py-8 pb-24">
         {/* Back Button */}
-        <Link to="/home" className="inline-flex items-center gap-2 text-primary hover:text-primary/80 mb-6">
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Home</span>
-        </Link>
+        <BackButton label="Back to Home" />
 
         {/* Page Header */}
         <div className="text-center mb-12">

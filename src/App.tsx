@@ -24,6 +24,7 @@ import SaintsGurus from "./pages/SaintsGurus";
 import SpiritualTechniques from "./pages/SpiritualTechniques";
 import Sadhna from "./pages/Sadhna";
 import Mantras from "./pages/Mantras";
+import PredictionInfo from "./pages/PredictionInfo";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -55,6 +56,7 @@ const App = () => (
             <Route path="/spiritual-techniques" element={<ProtectedRoute><SpiritualTechniques /></ProtectedRoute>} />
             <Route path="/sadhna" element={<ProtectedRoute><Sadhna /></ProtectedRoute>} />
             <Route path="/mantras" element={<ProtectedRoute><Mantras /></ProtectedRoute>} />
+            <Route path="/prediction-info" element={<ProtectedRoute><PredictionInfo /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

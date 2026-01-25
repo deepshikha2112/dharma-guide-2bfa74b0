@@ -10,10 +10,10 @@ const Header = () => {
 
   const navLinks = [
     { href: "/home#deities", label: "Deities" },
-    { href: "/panchang", label: "Panchang" },
+    { href: "/sacred-stories", label: "Stories" },
     { href: "/aarti", label: "Aarti" },
-    { href: "/vrat-guide", label: "Vrat" },
-    { href: "/prayer-journal", label: "Journal" },
+    { href: "/prediction-info", label: "Astro Info" },
+    { href: "/panchang", label: "Panchang" },
     { href: "/meditation", label: "Meditation" },
   ];
 
