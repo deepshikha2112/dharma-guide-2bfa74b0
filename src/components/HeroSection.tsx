@@ -1,6 +1,16 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Mic } from "lucide-react";
+import { Mic, Home, BookOpen, Music, Calendar, Star, Sparkles, Sun } from "lucide-react";
+
+const quickAccessItems = [
+  { icon: Home, label: "Deities", path: "/home", color: "bg-orange-100 text-orange-600" },
+  { icon: BookOpen, label: "Stories", path: "/sacred-stories", color: "bg-amber-100 text-amber-600" },
+  { icon: Music, label: "Aarti", path: "/aarti", color: "bg-red-100 text-red-600" },
+  { icon: Calendar, label: "Journal", path: "/prayer-journal", color: "bg-green-100 text-green-600" },
+  { icon: Star, label: "Vrat", path: "/vrat-guide", color: "bg-purple-100 text-purple-600" },
+  { icon: Sparkles, label: "Astro Info", path: "/prediction-info", color: "bg-indigo-100 text-indigo-600" },
+  { icon: Sun, label: "Panchang", path: "/panchang", color: "bg-yellow-100 text-yellow-600" },
+];
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -120,12 +130,48 @@ const HeroSection = () => {
           </div>
         </motion.div>
 
-        {/* Action Buttons - General entry points only, no spiritual logic */}
+        {/* Quick Access Grid - Mobile Centered */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.8 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
+          className="grid grid-cols-4 gap-3 max-w-sm mx-auto mb-12 md:hidden"
+        >
+          {quickAccessItems.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.label}
+                to={item.path}
+                className="flex flex-col items-center gap-1.5"
+              >
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 1 + index * 0.05, duration: 0.4 }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`w-12 h-12 rounded-xl flex items-center justify-center ${item.color}`}
+                  style={{
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                  }}
+                >
+                  <Icon className="w-5 h-5" />
+                </motion.div>
+                <span className="text-[10px] font-medium text-muted-foreground text-center leading-tight">
+                  {item.label}
+                </span>
+              </Link>
+            );
+          })}
+        </motion.div>
+
+        {/* Action Buttons - Desktop Only */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.8 }}
+          className="hidden md:flex flex-row gap-4 justify-center mb-16"
         >
           <a href="#deities">
             <motion.button
