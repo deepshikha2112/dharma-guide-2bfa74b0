@@ -10,7 +10,7 @@ const Header = () => {
   const location = useLocation();
 
   const navLinks = [
-    { href: "/home#deities", label: "Deities" },
+    { href: "/home", label: "Deities" },
     { href: "/sacred-stories", label: "Stories" },
     { href: "/aarti", label: "Aarti" },
     { href: "/prayer-journal", label: "Journal" },
