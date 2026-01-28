@@ -10,6 +10,8 @@ import NotificationManager from "@/components/NotificationManager";
 import Cover from "./pages/Cover";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import DeityDetail from "./pages/DeityDetail";
 import Guidance from "./pages/Guidance";
 import Compatibility from "./pages/Compatibility";
@@ -48,6 +50,8 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Cover />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/home" element={<ProtectedRoute><Index /></ProtectedRoute>} />
               <Route path="/deity/:id" element={<ProtectedRoute><DeityDetail /></ProtectedRoute>} />
               <Route path="/guidance" element={<ProtectedRoute><Guidance /></ProtectedRoute>} />
