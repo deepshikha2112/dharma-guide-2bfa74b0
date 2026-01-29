@@ -1,14 +1,27 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   ArrowLeft, Sun, Moon, Globe, Bell, Volume2, VolumeX, Type, Shield, Info, 
   MessageCircle, Mail, ChevronRight, Sunrise, Sun as SunIcon, Moon as MoonIcon, 
-  BellRing, BellOff, Smartphone
+  BellRing, BellOff, Smartphone, LogOut
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useSettings, ThemeMode, Language, TextSize } from "@/contexts/SettingsContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
+import { toast } from "@/hooks/use-toast";
 
 interface SettingsSectionProps {
   title: string;
@@ -63,6 +76,9 @@ const SettingsRow = ({ icon, label, sublabel, children, onClick, disabled }: Set
 
 const Settings = () => {
   const navigate = useNavigate();
+  const { signOut, user } = useAuth();
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const {
     settings,
     setThemeMode,
@@ -93,6 +109,27 @@ const Settings = () => {
 
   const handleThemeToggle = () => {
     setThemeMode(themeMode === "light" ? "dark" : "light");
+  };
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await signOut();
+      toast({
+        title: "Logged out successfully",
+        description: "You have been signed out. Namaste! 🙏",
+      });
+      navigate("/auth", { replace: true });
+    } catch (error) {
+      toast({
+        title: "Logout failed",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoggingOut(false);
+      setShowLogoutDialog(false);
+    }
   };
 
   const handleLanguageToggle = () => {
@@ -351,6 +388,30 @@ const Settings = () => {
           />
         </SettingsSection>
 
+        {/* Account Section */}
+        <SettingsSection title="Account">
+          <SettingsRow
+            icon={<Mail className="w-5 h-5" />}
+            label="Signed in as"
+            sublabel={user?.email || "Unknown"}
+          />
+          <div
+            className="flex items-center justify-between p-4 cursor-pointer hover:bg-destructive/5 transition-colors"
+            onClick={() => setShowLogoutDialog(true)}
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-destructive/10 text-destructive">
+                <LogOut className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="font-medium text-destructive">Logout</p>
+                <p className="text-sm text-muted-foreground">Sign out from your account</p>
+              </div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-destructive/60" />
+          </div>
+        </SettingsSection>
+
         {/* App Version Footer */}
         <div className="mt-8 text-center">
           <p className="text-sm text-muted-foreground">
@@ -361,6 +422,33 @@ const Settings = () => {
           </p>
         </div>
       </div>
+
+      {/* Logout Confirmation Dialog */}
+      <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+        <AlertDialogContent className="max-w-sm">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <LogOut className="w-5 h-5 text-destructive" />
+              Confirm Logout
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to sign out? You can always log back in with this account or use a different account.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex-row gap-2 sm:justify-end">
+            <AlertDialogCancel disabled={isLoggingOut} className="flex-1 sm:flex-none">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              className="flex-1 sm:flex-none bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {isLoggingOut ? "Signing out..." : "Yes, Logout"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
