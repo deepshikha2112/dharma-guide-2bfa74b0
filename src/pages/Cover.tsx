@@ -6,7 +6,7 @@ const Cover = () => {
   const navigate = useNavigate();
 
   const handleEnter = () => {
-    navigate("/home", { replace: true });
+    navigate("/auth", { replace: true });
   };
 
   return (
